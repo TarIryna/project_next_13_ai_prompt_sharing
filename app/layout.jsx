@@ -4,19 +4,20 @@ import Nav from "@components/Nav";
 import Provider from "@components/Provider";
 
 export const metadata = {
-  title: "Promptopia",
-  description: "Discover & Share AI Prompts",
+  title: "Avanti shoes bags",
+  description: "взуття сумки ужгород кросівки",
 };
 
 const RootLayout = ({ children }) => (
-  <html lang='en'>
+  <html lang="ua">
     <body>
+      <link rel="icon" href="/assets/favicon.ico" />
       <Provider>
-        <div className='main'>
-          <div className='gradient' />
+        <div className="main">
+          <div className="gradient" />
         </div>
 
-        <main className='app'>
+        <main className="app">
           <Nav />
           {children}
         </main>
