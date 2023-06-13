@@ -8,7 +8,11 @@ const nextConfig = {
     styledComponents: true,
   },
   images: {
-    domains: ["lh3.googleusercontent.com", "i.ibb.co"],
+    domains: [
+      "lh3.googleusercontent.com",
+      "i.ibb.co",
+      "pricecreator.rozetka.com.ua",
+    ],
   },
   webpack(config) {
     config.experiments = {

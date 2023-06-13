@@ -37,7 +37,7 @@ const Collection = () => {
   const fetchProducts = async () => {
     let url = "/api/product/";
     if (category) {
-      url = url.concat(`?category=${category?.query}`);
+      url = url.concat(`${category?.query}`);
     }
     if (filter.season) url = url.concat(`&season=${filter.season}`);
     const response = await fetch(url);

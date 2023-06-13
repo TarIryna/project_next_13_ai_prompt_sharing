@@ -1,11 +1,11 @@
-import Product from "@models/prompt";
+import Product from "@models/product";
 import { connectToDB } from "@utils/database";
 
 export const GET = async (request, { params }) => {
   try {
     await connectToDB();
     const product = await Product.find({
-      category: "boys",
+      category: params?.category,
     });
     if (!product) return new Response("Product Not Found", { status: 404 });
 
