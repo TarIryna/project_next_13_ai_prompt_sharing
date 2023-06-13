@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import Menu from "./Menu";
+
+// import { Dropdown } from "@styles/styles";
+import { useEffect, useState, useRef } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Nav = () => {
@@ -10,6 +13,20 @@ const Nav = () => {
 
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
+  const [menuDropdown, setMenuDropdown] = useState(false);
+
+  const anchorRef = useRef(null);
+
+  const handleToggle = () => {
+    setMenuDropdown((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+    setMenuDropdown(false);
+  };
 
   useEffect(() => {
     (async () => {
@@ -19,9 +36,21 @@ const Nav = () => {
   }, []);
 
   return (
-    <nav className="flex-between w-full mb-16 pt-3">
-      <div>
-        <Image src="/assets/icons/menu.svg" width={50} height={50} alt="menu" />
+    <nav className="flex-between w-full mb-2 pt-3">
+      <div className="relative menu_button">
+        <Image
+          src="/assets/icons/menu.svg"
+          width={50}
+          height={50}
+          alt="menu"
+          onClick={handleToggle}
+          ref={anchorRef}
+        />
+        <Menu
+          open={menuDropdown}
+          menuRef={anchorRef.current}
+          handleClose={handleClose}
+        />
       </div>
       <Link href="/" className="flex gap-2 flex-center">
         <Image

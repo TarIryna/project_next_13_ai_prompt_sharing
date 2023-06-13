@@ -1,7 +1,11 @@
 import "@styles/globals.css";
 
 import Nav from "@components/Nav";
-import Provider from "@components/Provider";
+import ProviderNext from "@components/Provider";
+
+// // ** Store Imports
+// import { store } from 'src/store';
+// import { Provider } from 'react-redux';
 
 export const metadata = {
   title: "Avanti shoes bags",
@@ -12,7 +16,7 @@ const RootLayout = ({ children }) => (
   <html lang="ua">
     <body>
       <link rel="icon" href="/assets/favicon.ico" />
-      <Provider>
+      <ProviderNext>
         <div className="main">
           <div className="gradient" />
         </div>
@@ -21,7 +25,7 @@ const RootLayout = ({ children }) => (
           <Nav />
           {children}
         </main>
-      </Provider>
+      </ProviderNext>
     </body>
   </html>
 );

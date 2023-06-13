@@ -4,16 +4,19 @@ const nextConfig = {
     appDir: true,
     serverComponentsExternalPackages: ["mongoose"],
   },
+  compiler: {
+    styledComponents: true,
+  },
   images: {
-    domains: ['lh3.googleusercontent.com'],
+    domains: ["lh3.googleusercontent.com", "i.ibb.co"],
   },
   webpack(config) {
     config.experiments = {
       ...config.experiments,
       topLevelAwait: true,
-    }
-    return config
-  }
-}
+    };
+    return config;
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
