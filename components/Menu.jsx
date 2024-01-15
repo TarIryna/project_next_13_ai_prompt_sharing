@@ -50,7 +50,7 @@ const Menu = ({ open, menuRef, handleClose }) => {
   };
 
   const onChooseItem = (item) => {
-    console.log(item);
+    // console.log(item);
   };
 
   const getLink = (item) => {

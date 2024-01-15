@@ -3,21 +3,21 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-import Card from "./Card";
+import SeasonTabs from "./SeasonTabs";
+import List from "./CardList";
+import SelectList from "./SelectList";
 
 import { tabsData } from "@utils/data";
 
-const List = ({ data }) => {
-  return (
-    <div className="cards-list">
-      {data && data.map((item) => <Card item={item} key={item.code} />)}
-    </div>
-  );
-};
-
 const Collection = () => {
   const path = usePathname();
-  const category = tabsData.find((item) => item.link === path);
+  const pathArray = path?.split("/");
+  const categoryName = pathArray[1];
+  const viewPath = pathArray.length > 2 ? pathArray[2]?.split("-") : null;
+  const season = viewPath && viewPath?.length > 0 ? viewPath[0] : null;
+  const view = viewPath && viewPath?.length > 1 ? viewPath[1] : null;
+
+  const category = tabsData.find((item) => item.query === categoryName);
   const nameCategory = category?.name;
 
   const [allProducts, setAllProducts] = useState([]);
@@ -37,21 +37,20 @@ const Collection = () => {
   const fetchProducts = async () => {
     let url = "/api/product/";
     if (category) {
-      url = url.concat(`${category?.query}`);
+      url = url.concat(`?category=${category?.query}`);
     }
-    if (filter.season) url = url.concat(`&season=${filter.season}`);
-    const response = await fetch(url);
-    const data = await response.json();
+    if (season) url = url.concat(`&season=${season}`);
+    if (view) url = url.concat(`&view=${view}`);
+    const response = await fetch(url, {
+      method: "GET",
+    });
+    const data = await response?.json();
     setAllProducts(data);
   };
 
   useEffect(() => {
     fetchProducts();
   }, []);
-
-  // useEffect(() => {
-  //   fetchProducts();
-  // }, [path, filter]);
 
   const filterProducts = (searchtext) => {
     const regex = new RegExp(searchtext, "i"); // 'i' flag for case-insensitive search
@@ -97,7 +96,9 @@ const Collection = () => {
         <div className="flex-between"></div>
       </form>
       <h1>{nameCategory}</h1>
-      {/* All Prompts */}
+      {category && category.query && <SeasonTabs category={category.query} />}
+      {/* <SelectList filter={filter} setFilter={setFilter} /> */}
+
       {searchText ? (
         <List data={searchedResults} handleTagClick={handleTagClick} />
       ) : (
