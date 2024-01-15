@@ -7,15 +7,25 @@ const OrderSchema = new Schema({
   },
   product: {
     ref: "Product",
-    required: [true, "Product is required."],
+    type: Schema.Types.ObjectId,
+    required: [true, "Product is required!"],
+  },
+  size: {
+    type: String,
+    required: [true, "Size is required!"],
   },
   quantity: {
     type: Number,
     required: [true],
     default: 1,
   },
+  status: {
+    type: String,
+    required: [true],
+    default: "new",
+  },
 });
 
 const Order = models.Order || model("Order", OrderSchema);
 
-export default Prompt;
+export default Order;

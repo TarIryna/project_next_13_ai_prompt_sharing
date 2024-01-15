@@ -31,7 +31,7 @@ const CreatePrompt = () => {
         router.push("/");
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -39,7 +39,7 @@ const CreatePrompt = () => {
 
   return (
     <Form
-      type='Create'
+      type="Create"
       post={post}
       setPost={setPost}
       submitting={submitting}
