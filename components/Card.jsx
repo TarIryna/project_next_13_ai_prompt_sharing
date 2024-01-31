@@ -6,9 +6,12 @@ import { useSession } from "next-auth/react";
 // import { usePathname, useRouter } from "next/navigation";
 
 const Card = ({ item }) => {
+  console.log(item);
   const code = item.Code;
   const { data: session } = useSession();
   const sizes = item.sizes[0]?.split(" ");
+  const userId = session?.user?.id ? session.user.id : Math.random();
+  const isSale = item.price > 0 && item.price2 > 0;
 
   const onSizeClick = async (size) => {
     try {
@@ -16,10 +19,12 @@ const Card = ({ item }) => {
         method: "POST",
         body: JSON.stringify({
           productId: item._id,
-          userId: session?.user.id,
+          userId,
           size,
           quantity: 1,
           status: "new",
+          image: item.image1,
+          price: item.price2 ?? item.price,
         }),
       });
 
@@ -37,7 +42,7 @@ const Card = ({ item }) => {
         {sizes &&
           sizes.map((size) => (
             <div
-              className="size-block"
+              className="size-block pointer"
               onClick={() => onSizeClick(size)}
               key={`${code}${size}`}
             >
@@ -51,12 +56,11 @@ const Card = ({ item }) => {
   return (
     <>
       {item && item.image1 && item.price && (
-        <div className="product_card mb-4">
+        <div className="product_card mb-4 flex-column justify-between">
           <div className="flex flex-col">
-            <h3 className="font-satoshi font-semibold text-gray-900">
+            <h3 className="font-satoshi font-semibold text-gray-900 capitalize">
               {item.name}
             </h3>
-            <p className="font-inter text-sm text-gray-500">{item.price} грн</p>
           </div>
           <div className="flex justify-between items-start gap-5">
             <div className="flex-1 flex justify-center items-center gap-3 cursor-pointer">
@@ -70,6 +74,16 @@ const Card = ({ item }) => {
             </div>
           </div>
           <div>{sizes && renderSizes(sizes)}</div>
+          {isSale ? (
+            <div className="flex-center">
+              <span className="red-price mr-5">{item.price2} грн.</span>
+              <span className="current-price">{item.price} грн.</span>
+            </div>
+          ) : (
+            <div className="flex-center">
+              <span className="current-price">{item.price} грн.</span>
+            </div>
+          )}
         </div>
       )}
     </>

@@ -1,6 +1,6 @@
 export const getParams = (string) => {
   if (!string) return {};
-  const paramsString = string?.split("api/product?")[1];
+  const paramsString = string?.split("api/products?")[1];
   const paramsArray = paramsString?.split("&");
   const params = {};
   paramsArray?.map((item) => {

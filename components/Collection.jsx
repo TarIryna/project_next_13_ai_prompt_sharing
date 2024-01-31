@@ -35,7 +35,7 @@ const Collection = () => {
   const [searchedResults, setSearchedResults] = useState([]);
 
   const fetchProducts = async () => {
-    let url = "/api/product/";
+    let url = "/api/products/";
     if (category) {
       url = url.concat(`?category=${category?.query}`);
     }

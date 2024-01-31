@@ -1,16 +1,35 @@
 import Order from "@models/orders";
 import { connectToDB } from "@utils/database";
 
+// export const GET = async (request, { params }) => {
+//   try {
+//     await connectToDB();
+//     const currentOrder = await Order.find({
+//       creator: params?.userId,
+//       status: "new",
+//     });
+//     console.log(currentOrder);
+//     if (!currentOrder) return new Response("Order Not Found", { status: 404 });
+//     return new Response(JSON.stringify(currentOrder), { status: 200 });
+//   } catch (error) {
+//     return new Response("Failed to find current order", { status: 500 });
+//   }
+// };
+
 export const GET = async (request, { params }) => {
+  // console.log(params);
   try {
     await connectToDB();
-    const currentOrder = await Order.find({
-      creator: params?.userId,
+
+    const orders = await Order.find({
+      creator: params.id,
       status: "new",
-    });
-    if (!currentOrder) return new Response("Order Not Found", { status: 404 });
-    return new Response(JSON.stringify(currentOrder), { status: 200 });
+    }).populate("creator");
+
+    return new Response(JSON.stringify(orders), { status: 200 });
   } catch (error) {
-    return new Response("Failed to find current order", { status: 500 });
+    return new Response("Failed to fetch prompts created by user", {
+      status: 500,
+    });
   }
 };

@@ -3,21 +3,29 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-import Profile from "@components/Profile";
+import OrdersList from "@components/OrdersList";
 
 const MyProfile = () => {
   const router = useRouter();
   const { data: session } = useSession();
 
+  if (!session) router.push("/");
+
   const [myPosts, setMyPosts] = useState([]);
+  const [myOrders, setMyOrders] = useState([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await fetch(`/api/users/${session?.user.id}/posts`);
       const data = await response.json();
 
+      const responseOrders = await fetch(
+        `/api/users/${session?.user.id}/orders`
+      );
+      const dataOrders = await responseOrders.json();
+
       setMyPosts(data);
+      setMyOrders(dataOrders);
     };
 
     if (session?.user.id) fetchPosts();
@@ -47,14 +55,12 @@ const MyProfile = () => {
     }
   };
 
+  console.log(myOrders);
+
   return (
-    <Profile
-      name="My"
-      desc="Welcome to your personalized profile page. Share your exceptional prompts and inspire others with the power of your imagination"
-      data={myPosts}
-      handleEdit={handleEdit}
-      handleDelete={handleDelete}
-    />
+    <>
+      <OrdersList data={myOrders} />
+    </>
   );
 };
 

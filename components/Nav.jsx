@@ -79,6 +79,14 @@ const Nav = () => {
                 alt="profile"
               />
             </Link>
+            <Link href="/cart">
+              <Image
+                src="/assets/icons/shoppingCart.svg"
+                width={37}
+                height={37}
+                alt="cart"
+              />
+            </Link>
           </div>
         ) : (
           <>
@@ -95,6 +103,14 @@ const Nav = () => {
                   Sign in
                 </button>
               ))}
+            <Link href="/cart">
+              <Image
+                src="/assets/icons/shoppingCart.svg"
+                width={37}
+                height={37}
+                alt="cart"
+              />
+            </Link>
           </>
         )}
       </div>
@@ -156,6 +172,14 @@ const Nav = () => {
                   Sign in
                 </button>
               ))}
+            <Link href="/cart">
+              <Image
+                src="/assets/icons/shoppingCart.svg"
+                width={37}
+                height={37}
+                alt="cart"
+              />
+            </Link>
           </>
         )}
       </div>
