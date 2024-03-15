@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react";
 // import { usePathname, useRouter } from "next/navigation";
 
 const Card = ({ item }) => {
-  console.log(item);
   const code = item.Code;
   const { data: session } = useSession();
   const sizes = item.sizes[0]?.split(" ");

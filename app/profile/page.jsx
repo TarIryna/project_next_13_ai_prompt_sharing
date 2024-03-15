@@ -16,16 +16,11 @@ const MyProfile = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch(`/api/users/${session?.user.id}/posts`);
+      const response = fetch(`/api/users/${session?.user.id}/orders/all`);
       const data = await response.json();
+      console.log(data);
 
-      const responseOrders = await fetch(
-        `/api/users/${session?.user.id}/orders`
-      );
-      const dataOrders = await responseOrders.json();
-
-      setMyPosts(data);
-      setMyOrders(dataOrders);
+      // setMyOrders(data);
     };
 
     if (session?.user.id) fetchPosts();
@@ -54,8 +49,6 @@ const MyProfile = () => {
       }
     }
   };
-
-  console.log(myOrders);
 
   return (
     <>

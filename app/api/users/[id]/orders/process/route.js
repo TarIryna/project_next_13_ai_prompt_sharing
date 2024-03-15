@@ -7,7 +7,7 @@ export const GET = async (request, { params }) => {
 
     const orders = await Order.find({
       creator: params.id,
-      status: "new",
+      status: "in process",
     }).populate("creator");
 
     return new Response(JSON.stringify(orders), { status: 200 });
@@ -26,7 +26,7 @@ export const POST = async (request) => {
 
     const products = await Order.find({
       creator: userId,
-      status: "new",
+      status: "in process",
     }).populate("creator");
 
     products.map((item) => {

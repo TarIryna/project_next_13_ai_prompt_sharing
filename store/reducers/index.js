@@ -1,6 +1,10 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import { productsSlice } from "../slice/products";
+import { ordersSlice } from "@store/slice/orders";
+import { userSlice } from "@store/slice/user";
 
 export const rootReducer = combineReducers({
-  producst: productsSlice.reducer,
+  products: productsSlice.reducer,
+  orders: ordersSlice.reducer,
+  user: userSlice.reducer,
 });

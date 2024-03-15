@@ -2,9 +2,7 @@ import Product from "@models/product";
 import { connectToDB } from "@utils/database";
 
 export const GET = async (request, { params }) => {
-  console.log(params);
   const result = await request.json();
-  console.log("result", result);
   try {
     await connectToDB();
     const product = await Product.find({

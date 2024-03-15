@@ -222,3 +222,14 @@
   align-items: center;
   justify-content: center;
 }
+
+.cart_shipping__input{
+  /* position: absolute;
+  top: 0;
+  left: 0; */
+  width: 100px;
+  height: 50px;
+}
+/* .cart_shipping__select{
+  position: relative;
+} */

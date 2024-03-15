@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ProductsService } from "@store/services/products";
+// import { ProductsService } from "@store/services/products";
 
 const initialState = {
   query: "",
@@ -13,8 +13,8 @@ const initialState = {
   isError: false,
 };
 
-export const gamesSlice = createSlice({
-  name: "games",
+export const productsSlice = createSlice({
+  name: "products",
   initialState,
   reducers: {
     changeGames: (state, action) => {
@@ -55,30 +55,30 @@ export const gamesSlice = createSlice({
       state.query = "";
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(GamesService.fetchGames.pending, (state) => {
-      state.isLoading = true;
-      state.isError = null;
-    });
-    builder.addCase(GamesService.fetchGames.fulfilled, (state, action) => {
-      state.isLoading = false;
-      const result =
-        state.query.length > 0 ? action.payload.result.games : action.payload;
-      if (state.page === 1) {
-        state.games = result.result;
-        state.pages = result.pages;
-      }
-      if (state.page > 1) {
-        state.games = [...state.games, ...result.result];
-        state.pages = result.pages;
-      }
-    });
-    builder.addCase(GamesService.fetchGames.rejected, (state, action) => {
-      state.isLoading = false;
-      state.isError = action.error;
-      state.games = [];
-    });
-  },
+  // extraReducers: (builder) => {
+  //   builder.addCase(GamesService.fetchGames.pending, (state) => {
+  //     state.isLoading = true;
+  //     state.isError = null;
+  //   });
+  //   builder.addCase(GamesService.fetchGames.fulfilled, (state, action) => {
+  //     state.isLoading = false;
+  //     const result =
+  //       state.query.length > 0 ? action.payload.result.games : action.payload;
+  //     if (state.page === 1) {
+  //       state.games = result.result;
+  //       state.pages = result.pages;
+  //     }
+  //     if (state.page > 1) {
+  //       state.games = [...state.games, ...result.result];
+  //       state.pages = result.pages;
+  //     }
+  //   });
+  //   builder.addCase(GamesService.fetchGames.rejected, (state, action) => {
+  //     state.isLoading = false;
+  //     state.isError = action.error;
+  //     state.games = [];
+  //   });
+  // },
 });
 
 export const {
@@ -90,4 +90,4 @@ export const {
   changeQuery,
   changeGames,
   changeToInitial,
-} = gamesSlice.actions;
+} = productsSlice?.actions;

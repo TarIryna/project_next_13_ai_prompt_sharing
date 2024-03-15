@@ -136,7 +136,6 @@ const makeUnique = (array) => {
     if (newArray.find((newItem) => newItem.query === item.query)) return;
     else newArray.push(item);
   });
-  console.log(newArray);
 };
 
 export const views = (season, category) => {

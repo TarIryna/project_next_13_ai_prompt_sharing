@@ -57,3 +57,21 @@ export const PATCH = async (request) => {
     return new Response("Error Updating Order", { status: 500 });
   }
 };
+
+export const GET = async (request, { params }) => {
+  // console.log(params);
+  try {
+    await connectToDB();
+
+    const orders = await Order.find({
+      creator: params.id,
+      status: "new",
+    }).populate("creator");
+
+    return new Response(JSON.stringify(orders), { status: 200 });
+  } catch (error) {
+    return new Response("Failed to fetch prompts created by user", {
+      status: 500,
+    });
+  }
+};

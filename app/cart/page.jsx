@@ -1,7 +1,7 @@
 "use client";
 
 import ProviderNext from "@components/Provider";
-import CartPage from "@components/CartPage";
+import CartPage from "@views/CartPage";
 
 const MyCart = () => {
   return (

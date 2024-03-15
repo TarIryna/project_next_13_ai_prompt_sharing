@@ -2,9 +2,7 @@ import Select from "./Select";
 import { tabsData, seasons, views } from "@utils/data";
 
 const SelectList = ({ filter, setFilter }) => {
-  const handleChange = (e) => {
-    console.log(e.targer);
-  };
+  const handleChange = (e) => {};
   const arrayViews = views();
 
   return (
