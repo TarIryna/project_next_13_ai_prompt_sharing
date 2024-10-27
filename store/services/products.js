@@ -6,10 +6,20 @@ const axiosInstance = axios.create({
 });
 export class ProductsService {
   static fetchGames = createAsyncThunk(
-    "GamesService/fetchGames",
+    "ProductsService/fetchProducts",
     async (params, redux) => {
-      const { query, page, pages, quantity, provider, collection, category } =
-        params;
+      const {
+        query,
+        page,
+        pages,
+        quantity,
+        provider,
+        collection,
+        gender,
+        material,
+        color,
+        sortBy,
+      } = params;
       let url = "";
       if (query?.length > 0) {
         try {
@@ -24,7 +34,7 @@ export class ProductsService {
         }
       } else {
         if (query === "" && !provider && !collection) {
-          url = `/game/list?category=${category}&_pagesize=${quantity}&_page=${page}`;
+          url = `/game/list?gender=${gender}&material=${material}&color=${color}&_pagesize=${quantity}&_page=${page}`;
         }
         if (provider) {
           const brand = provider.toLowerCase();

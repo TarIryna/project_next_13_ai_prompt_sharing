@@ -2,28 +2,45 @@ import Product from "@models/product";
 import { connectToDB } from "@utils/database";
 
 import { getParams } from "@utils/getParams";
+import { getSortParam } from "@helpers/getSortParam";
 
 export const GET = async (request, { params }) => {
-  let query = {};
-  if (request.nextUrl) query = getParams(request.nextUrl.toString());
+  const url = new URL(request.url);
+  const searchParams = new URLSearchParams(url.searchParams);
+  const pageSize = searchParams.get("pagesize");
+  const page = searchParams.get("page");
+  const season = searchParams.get("season");
+  const sortBy = searchParams.get("sortBy");
+  const sortParam = getSortParam(sortBy);
   try {
     await connectToDB();
-
-    const products = await Product.find(query).limit(24);
-
-    return new Response(JSON.stringify(products), { status: 200 });
+    let result = {};
+    if (page > 1) {
+      const total = await Product.find({ season }).count();
+      const products = await Product.find({ season })
+        .sort(sortParam)
+        .limit(pageSize)
+        .skip((page - 1) * pageSize);
+      result = { total, products };
+    } else {
+      const total = await Product.find({ season }).count();
+      const products = await Product.find({ season })
+        .sort(sortParam)
+        .limit(pageSize);
+      result = { total, products };
+    }
+    return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
     return new Response("Failed to fetch all products", { status: 500 });
   }
 };
 
 export const POST = async (request, { params }) => {
-  // console.log(params);
   const result = await request.json();
   try {
     await connectToDB();
     const product = await Product.find({
-      category: result?.category,
+      gender: result?.gender,
       season: result?.season,
       view: result?.view,
     }).limit(36);

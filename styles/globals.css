@@ -105,7 +105,7 @@
 /* PromptCard Component */
 .product_card {
   @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
-  height: 400px;
+  height: 450px;
 }
 
 .flex-center {
@@ -233,3 +233,22 @@
 /* .cart_shipping__select{
   position: relative;
 } */
+
+.absolute-center{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+ }
+ .navigation {
+  height: 100px;
+  @media screen and (max-width: 767px){
+    height: unset;
+  }
+ }
+ .main-logo{
+  width: auto;
+  height: 100px;
+  @media screen and (max-width: 767px){
+    height: unset;
+  }
+ }

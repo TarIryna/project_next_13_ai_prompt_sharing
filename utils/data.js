@@ -5,6 +5,7 @@ export const tabsData = [
     image: "/assets/images/women.jpg",
     query: "women",
     menu: "Жінки",
+    filterName: "Жінки",
   },
   {
     name: "Для чоловіків",
@@ -12,6 +13,7 @@ export const tabsData = [
     image: "/assets/images/men.jpg",
     query: "men",
     menu: "Чоловіки",
+    filterName: "Чоловіки",
   },
   {
     name: "Для дівчат",
@@ -19,6 +21,7 @@ export const tabsData = [
     image: "/assets/images/girls.jpg",
     query: "girls",
     menu: "Дівчата",
+    filterName: "Дівчата",
   },
   {
     name: "Для хлопчиків",
@@ -26,6 +29,7 @@ export const tabsData = [
     image: "/assets/images/boys.jpg",
     query: "boys",
     menu: "Хлопці",
+    filterName: "Хлопці",
   },
 ];
 
@@ -118,10 +122,25 @@ export const menuData = {
 };
 
 export const seasons = [
-  { link: "winter", name: "Зимове взуття", query: "winter" },
-  { link: "summer", name: "Літнє взуття", query: "summer" },
-  { link: "autumn", name: "Весна-осінь", query: "autumn" },
-  { link: "demi", name: "Демісезонне взуття", query: "demi" },
+  {
+    link: "winter",
+    name: "Зимове взуття",
+    query: "winter",
+    filterName: "зима",
+  },
+  { link: "summer", name: "Літнє взуття", query: "summer", filterName: "літо" },
+  {
+    link: "autumn",
+    name: "Весна-осінь",
+    query: "autumn",
+    filterName: "весна/осінь",
+  },
+  {
+    link: "demi",
+    name: "Демісезонне взуття",
+    query: "demi",
+    filterName: "демісезон",
+  },
 ];
 
 const getNameView = (string) => {
@@ -136,38 +155,39 @@ const makeUnique = (array) => {
     if (newArray.find((newItem) => newItem.query === item.query)) return;
     else newArray.push(item);
   });
+  return newArray;
 };
 
-export const views = (season, category) => {
+export const views = (season, gender) => {
   let data = [];
-  const filterByCategory = category
-    ? tabsData.find((item) => item.query === category).menu
+  const filterByGender = gender
+    ? tabsData.find((item) => item.query === gender).menu
     : null;
   const filterBySeason = season
     ? seasons.find((item) => item.link === season).name
     : null;
-  if (filterByCategory && filterBySeason) {
-    const elements = menuData[filterByCategory][filterBySeason];
+  if (filterByGender && filterBySeason) {
+    const elements = menuData[filterByGender][filterBySeason];
     for (let i in elements) {
       data.push({
         name: i,
-        query: getNameView(menuData[filterByCategory][filterBySeason][i]),
+        query: getNameView(menuData[filterByGender][filterBySeason][i]),
       });
     }
   }
-  if (filterByCategory && !filterBySeason) {
-    const elementsOfCategory = menuData[filterByCategory];
-    for (let i in elementsOfCategory) {
-      const elements = menuData[filterByCategory][i];
+  if (filterByGender && !filterBySeason) {
+    const elementsOfGender = menuData[filterByGender];
+    for (let i in elementsOfGender) {
+      const elements = menuData[filterByGender][i];
       for (let j in elements) {
         data.push({
           name: j,
-          query: getNameView(menuData[filterByCategory][i][j]),
+          query: getNameView(menuData[filterByGender][i][j]),
         });
       }
     }
   }
-  if (!filterByCategory && filterBySeason) {
+  if (!filterByGender && filterBySeason) {
     for (let item in menuData) {
       const elementsOfSeason = menuData[item][filterBySeason];
       for (let i in elementsOfSeason) {
@@ -178,10 +198,10 @@ export const views = (season, category) => {
       }
     }
   }
-  if (!filterByCategory && !filterBySeason) {
+  if (!filterByGender && !filterBySeason) {
     for (let item in menuData) {
-      const elementsOfCategory = menuData[item];
-      for (let i in elementsOfCategory) {
+      const elementsOfGender = menuData[item];
+      for (let i in elementsOfGender) {
         const elementsOfSeason = menuData[item][i];
         for (let j in elementsOfSeason) {
           data.push({ name: j, query: getNameView(menuData[item][i][j]) });
@@ -191,3 +211,62 @@ export const views = (season, category) => {
   }
   return makeUnique(data);
 };
+
+export const sizes = () => {
+  const array = [];
+  for (let i = 16; i < 50; i++) {
+    array.push(i.toString());
+  }
+  return array;
+};
+
+export const materialList = [
+  {
+    name: "Натуральна шкіра",
+    query: "natural",
+    filterName: "Натуральна шкіра",
+  },
+  {
+    name: "Екошкіра",
+    query: "pu",
+    filterName: "экокожа",
+  },
+];
+
+export const colorsList = [
+  {
+    name: "білий",
+    query: "Белый",
+    filterName: "білий",
+  },
+  {
+    name: "чорний",
+    query: "Черный",
+    filterName: "чорний",
+  },
+  {
+    name: "бежевий",
+    query: "Бежевый",
+    filterName: "бежевий",
+  },
+  {
+    name: "коричневий",
+    query: "Коричневый",
+    filterName: "коричневий",
+  },
+];
+
+export const sortList = [
+  {
+    name: "ціною з найменшої",
+    query: "priceUp",
+    filterName: "ціною з найменшої",
+  },
+  {
+    name: "ціною з навищої",
+    query: "priceDown",
+    filterName: "ціною з найвищої",
+  },
+  { name: "популярністю", query: "popular", filterName: "популярністю" },
+  { name: "новинки", query: "new", filterName: "новинки" },
+];

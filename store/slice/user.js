@@ -11,6 +11,7 @@ export const userSlice = createSlice({
   reducers: {
     loginUser: (state, action) => {
       state.user = action.payload;
+      if (state.user.user.id) state.user.user.id = action.payload?.id;
       state.isAuth = true;
     },
     logoutUser: (state) => {
@@ -19,6 +20,9 @@ export const userSlice = createSlice({
     },
     changeAuth: (state, action) => {
       state.isAuth = action.payload;
+    },
+    changeUserDeliveryData: (state, action) => {
+      state.user.user = action.payload;
     },
   },
 });

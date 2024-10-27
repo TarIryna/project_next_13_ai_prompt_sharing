@@ -1,84 +1,97 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import { ProductsService } from "@store/services/products";
 
 const initialState = {
   query: "",
   page: 1,
   pages: 1,
+  total: 0,
   quantity: 24,
-  season: null,
-  gender: null,
+  season: "",
+  gender: "",
+  brand: "",
+  view: "",
+  material: "",
+  color: "",
+  sortBy: "",
   products: [],
   isLoading: false,
   isError: false,
+  size: "",
 };
 
 export const productsSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    changeGames: (state, action) => {
-      state.games = action.payload;
+    changeProducts: (state, action) => {
+      state.total = action.payload.total;
+      state.pages = Math.ceil(action.payload.total / state.quantity);
+      state.isLoading = false;
+      if (state.page > 1)
+        state.products = [...state.products, ...action.payload.products];
+      else state.products = action.payload.products;
     },
     changePage: (state, action) => {
       state.page = action.payload;
-    },
-    changePages: (state, action) => {
-      state.pages = action.payload;
     },
     changeQauntity: (state, action) => {
       state.page = 1;
       state.quantity = action.payload;
     },
-    changeProvider: (state, action) => {
+    changeSeason: (state, action) => {
       state.collection = null;
       state.query = "";
       state.page = 1;
-      state.provider = action.payload;
+      state.season = action.payload;
     },
-    changeCollection: (state, action) => {
-      state.provider = null;
+    changeGender: (state, action) => {
       state.query = "";
       state.page = 1;
-      state.collection = action.payload;
+      state.gender = action.payload;
+    },
+    changeView: (state, action) => {
+      state.query = "";
+      state.page = 1;
+      state.view = action.payload;
     },
     changeQuery: (state, action) => {
-      state.provider = null;
       state.collection = null;
       state.page = 1;
       state.query = action.payload;
     },
-    changeToInitial: (state, action) => {
+    changeFilter: (state, action) => {
       state.page = 1;
-      state.collection = null;
-      state.provider = null;
+      state.gender = action.payload.gender;
+      state.season = action.payload.season;
+      state.view = action.payload.view;
+      state.size = action.payload.size;
+      state.color = action.payload.color;
+      state.material = action.payload.material;
+      state.sortBy = action.payload.sortBy;
       state.query = "";
     },
+    changeToInitial: (state) => {
+      state.query = "";
+      state.page = 1;
+      state.pages = 1;
+      state.quantity = 24;
+      state.season = "";
+      state.gender = "";
+      state.material = "";
+      state.color = "";
+      state.brand = "";
+      state.size = "";
+      state.view = "";
+      state.total = 0;
+      state.sortBy = "";
+      state.products = [];
+      state.isLoading = false;
+      state.isError = false;
+    },
+    changeIsLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
   },
-  // extraReducers: (builder) => {
-  //   builder.addCase(GamesService.fetchGames.pending, (state) => {
-  //     state.isLoading = true;
-  //     state.isError = null;
-  //   });
-  //   builder.addCase(GamesService.fetchGames.fulfilled, (state, action) => {
-  //     state.isLoading = false;
-  //     const result =
-  //       state.query.length > 0 ? action.payload.result.games : action.payload;
-  //     if (state.page === 1) {
-  //       state.games = result.result;
-  //       state.pages = result.pages;
-  //     }
-  //     if (state.page > 1) {
-  //       state.games = [...state.games, ...result.result];
-  //       state.pages = result.pages;
-  //     }
-  //   });
-  //   builder.addCase(GamesService.fetchGames.rejected, (state, action) => {
-  //     state.isLoading = false;
-  //     state.isError = action.error;
-  //     state.games = [];
-  //   });
-  // },
 });
 
 export const {

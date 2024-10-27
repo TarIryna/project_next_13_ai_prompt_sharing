@@ -32,9 +32,8 @@ export const POST = async (request) => {
 };
 
 export const PATCH = async (request) => {
-  const { date, status, id } = await request.json();
-  const orderId = Math.random();
-
+  const { date, status, id, delivery } = await request.json();
+  const isDelivery = delivery?.city?.length > 0 && delivery?.adress?.length > 0;
   try {
     await connectToDB();
 
@@ -44,12 +43,11 @@ export const PATCH = async (request) => {
     if (!existingOrder) {
       return new Response("Order not found", { status: 404 });
     }
-
+    const existingDelivery = existingOrder.delivery;
     // Update the product with new data
     existingOrder.date = date;
     existingOrder.status = status;
-    existingOrder.orderId = orderId;
-
+    existingOrder.delivery = isDelivery ? delivery : existingDelivery;
     await existingOrder.save();
 
     return new Response("Successfully updated the order", { status: 200 });
@@ -59,7 +57,6 @@ export const PATCH = async (request) => {
 };
 
 export const GET = async (request, { params }) => {
-  // console.log(params);
   try {
     await connectToDB();
 

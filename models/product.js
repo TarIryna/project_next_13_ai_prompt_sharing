@@ -11,9 +11,9 @@ const ProductSchema = new Schema(
       type: String,
       required: [true, "name is required"],
     },
-    category: {
+    gender: {
       type: String,
-      required: [true, "category is required"],
+      required: [true, "gender is required"],
     },
     view: {
       type: String,
@@ -36,8 +36,13 @@ const ProductSchema = new Schema(
       type: Number,
     },
     sizes: {
-      type: Array,
-      required: true,
+      type: String,
+    },
+    material: {
+      type: String,
+    },
+    color: {
+      type: String,
     },
   },
   { versionKey: false, timestamps: true }

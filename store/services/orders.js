@@ -5,7 +5,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 //   baseURL: "https://flex-dev.cosmicslot.com/en",
 // });
 export class OrdersService {
-  static fetchGames = createAsyncThunk(
+  static fetchOrders = createAsyncThunk(
     "OrdersService/fetchOrders",
     async (params, redux) => {
       const { userId } = params;

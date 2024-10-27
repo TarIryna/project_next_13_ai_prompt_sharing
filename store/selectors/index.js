@@ -6,4 +6,9 @@ export const useCommon = () => useSelector((state) => state.common);
 
 export const useOrders = () => useSelector((state) => state.orders);
 
+export const useNewOrder = () => useSelector((state) => state.neworder);
 
+export const useProducts = () => useSelector((state) => state.products);
+
+export const useProduct = () =>
+  useSelector((state) => state.product.productInfo);

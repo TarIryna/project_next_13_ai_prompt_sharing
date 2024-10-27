@@ -1,11 +1,7 @@
 import "@styles/globals.css";
 
-import Nav from "@components/Nav";
+import Nav from "@components/Nav/Nav";
 import ProviderNext from "@components/Provider";
-
-// // ** Store Imports
-// import { store } from 'src/store';
-// import { Provider } from 'react-redux';
 
 export const metadata = {
   title: "Avanti shoes bags",

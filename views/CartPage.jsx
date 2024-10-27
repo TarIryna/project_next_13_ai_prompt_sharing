@@ -1,20 +1,15 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useFetchAllOrders } from "@helpers/useFetchAllOrders";
 import Loading from "@app/profile/loading";
 import CartNew from "../components/Cart/CartNew";
 import CartInProcess from "../components/Cart/CartInProcess";
 import CartSuccess from "../components/Cart/CartSuccess";
 import CartError from "../components/Cart/CartError";
 import CartEmpty from "../components/Cart/CartEmpty";
+
 import {
-  changeOrderAllOrdersAction,
-  changeOrderIsLoadingAction,
-  changeOrderisErrorAction,
-  changeOrdersUserAction,
-} from "@store/actions/orders";
-import {
-  useAllOrders,
   useOrderIsError,
   useOrderIsLoading,
   useNewOrders,
@@ -34,24 +29,8 @@ const CartPage = ({ data, handleEdit }) => {
   const isError = useOrderIsError();
 
   useEffect(() => {
-    const fetchAllOrders = async () => {
-      changeOrderIsLoadingAction(true);
-
-      const response = await fetch(`/api/users/${session?.user.id}/orders/all`);
-      const data = await response.json();
-
-      if (data) {
-        const newOrder = data.filter((item) => item.status === "new");
-        const progress = data.filter((item) => item.status === "in progress");
-        const success = data.filter((item) => item.status === "confirmed");
-        const error = data.filter((item) => item.status === "error");
-        changeOrderAllOrdersAction({ new: newOrder, progress, success, error });
-      }
-      changeOrderIsLoadingAction(false);
-    };
-
-    if (session?.user.id) fetchAllOrders();
-  }, [session?.user.id]);
+    if (session?.id) useFetchAllOrders(session?.id);
+  }, [session?.id]);
 
   return (
     <section className="w-full">

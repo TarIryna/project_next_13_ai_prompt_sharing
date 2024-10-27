@@ -1,5 +1,5 @@
-import Collection from "@components/Collection";
-import Tabs from "@components/Tabs";
+import Collection from "@components/Collection/Collection";
+import Tabs from "@components/Collection/Tabs";
 import ProviderNext from "@components/Provider";
 
 const Home = () => (

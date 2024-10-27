@@ -2,14 +2,14 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import OrdersList from "@components/OrdersList";
+// import { useRouter } from "next/navigation";
+import OrdersList from "@components/Cart/OrdersList";
 
 const MyProfile = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const { data: session } = useSession();
 
-  if (!session) router.push("/");
+  // if (!session) router.push("/");
 
   const [myPosts, setMyPosts] = useState([]);
   const [myOrders, setMyOrders] = useState([]);
@@ -18,7 +18,6 @@ const MyProfile = () => {
     const fetchPosts = async () => {
       const response = fetch(`/api/users/${session?.user.id}/orders/all`);
       const data = await response.json();
-      console.log(data);
 
       // setMyOrders(data);
     };

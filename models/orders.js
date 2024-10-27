@@ -40,6 +40,10 @@ const OrderSchema = new Schema({
     type: Number,
     required: [false],
   },
+  delivery: {
+    type: Object,
+    default: {},
+  },
 });
 
 const Order = models.Order || model("Order", OrderSchema);

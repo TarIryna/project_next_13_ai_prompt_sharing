@@ -6,7 +6,11 @@ const CartSuccess = () => {
 
   return (
     <div>
-      <CartList status="success" products={products} />
+      <h3>
+        Дякуємо за замовлення!!! Очікуйте дзвінка або смс у вайдері від
+        менеджера для підтвердження
+      </h3>
+      <CartList status="confirmed" products={products} />
     </div>
   );
 };

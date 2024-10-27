@@ -13,6 +13,24 @@ const UserSchema = new Schema({
   image: {
     type: String,
   },
+  name: {
+    type: String,
+  },
+  surname: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  city: {
+    type: String,
+  },
+  adress: {
+    type: String,
+  },
+  isViber: {
+    type: Boolean,
+  },
 });
 
 const User = models.User || model("User", UserSchema);

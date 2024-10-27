@@ -12,6 +12,7 @@ import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 
 import { menuData } from "@utils/data";
+import { changeToInitialAction } from "@store/actions/products";
 
 function handleListKeyDown(event) {
   if (event.key === "Tab") {
@@ -54,7 +55,10 @@ const Menu = ({ open, menuRef, handleClose }) => {
   };
 
   const getLink = (item) => {
-    return menuData[submenu][subtab][item];
+    changeToInitialAction();
+    const routeText = menuData[submenu][subtab][item];
+    const route = routeText.replace("-", "/");
+    return route;
   };
 
   return (

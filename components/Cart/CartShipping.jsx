@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react";
 import debounce from "debounce";
+import { useUser } from "@store/selectors";
 
 const CartShipping = () => {
+  const user = useUser()?.user?.user;
+  const userCity = user?.city;
+  const userAdress = user?.adress;
+
+  const isUserDeliveryData =
+    userCity?.length > 0 && userAdress?.length > 0 ? true : false;
+
   const [regions, setRegions] = useState(null);
-  const [filteredRegions, setFilteredRegions] = useState([]);
   const [value, setValue] = useState("");
-  const [city, setCity] = useState(null);
+  const [city, setCity] = useState(userCity ?? "");
   const [adresses, setAddresses] = useState([]);
-  const [adress, setAdress] = useState(null);
+  const [adress, setAdress] = useState(userAdress ?? "");
+  const [showSelects, setShowSelects] = useState(true);
 
   const fetchRegions = async (query) => {
     const response = await fetch(
@@ -28,20 +36,30 @@ const CartShipping = () => {
   }, []);
 
   useEffect(() => {
+    if (isUserDeliveryData) setShowSelects(false);
+    else setShowSelects(true);
+  }, [isUserDeliveryData]);
+
+  useEffect(() => {
     fetchRegions(value);
   }, [value]);
 
   useEffect(() => {
     if (!city) return;
+    if (!city.ref) return;
     fetchAdress(city.ref);
   }, [city]);
 
   const renderOptions = (array, name) => (
     <select
       name="cities"
-      id="cities"
+      id={name}
       className="cart_shipping__select"
-      onChange={name === "city" ? selectCity : selectAdress}
+      onChange={
+        name === "city"
+          ? debounce(selectCity, 200)
+          : debounce(selectAdress, 200)
+      }
     >
       <option value="">
         {name === "city" ? "Виберіть місто" : "Виберіть відділення"}:
@@ -61,7 +79,6 @@ const CartShipping = () => {
 
   const selectCity = (e) => {
     setCity({ name: e.target.children[1].value, ref: e.target.children[1].id });
-    console.log(e.target.children[1].id);
   };
 
   const selectAdress = (e) => {
@@ -71,17 +88,51 @@ const CartShipping = () => {
     });
   };
 
+  const changeDelivery = () => {
+    setShowSelects(true);
+  };
+
   return (
     <div>
-      <h3>Оберіть способи доставки:</h3>
+      {showSelects ? (
+        <h3>Оберіть способи доставки:</h3>
+      ) : (
+        <h3>Реквізити доставки:</h3>
+      )}
       <h4>Нова пошта</h4>
-      <input
-        value={value}
-        onChange={onChange}
-        className="cart_shipping__input"
-      />
-      {regions && renderOptions(regions, "city")}
-      {adresses?.length > 0 && renderOptions(adresses, "adress")}
+      {!showSelects && (
+        <>
+          <input
+            name="city"
+            value={city}
+            disabled
+            className="cart_shipping__input"
+          />
+          <input
+            name="adress"
+            value={adress}
+            disabled
+            className="cart_shipping__input"
+          />
+          <button onClick={changeDelivery}>Змінити реквізити доставки</button>
+        </>
+      )}
+
+      {showSelects && (
+        <>
+          <input
+            value={value}
+            onChange={onChange}
+            className="cart_shipping__input"
+            placeholder="Почніть вводити назву міста і виберіть із списку"
+          />
+          {regions && renderOptions(regions, "city")}
+          {adresses?.length > 0 && renderOptions(adresses, "adress")}
+        </>
+      )}
+
+      {adress && <button className="block">Підтвердити замовлення</button>}
+      {adress && <p>Після підтвердження очікуйте дзвінка менеджера</p>}
     </div>
   );
 };
