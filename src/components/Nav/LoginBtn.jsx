@@ -34,7 +34,13 @@ const LoginButton = () => {
         </Link>
       ) : (
         <>
-          <AuthButton src={AuthIcon} width="30" height="30" onClick={onAuth} />
+          <AuthButton
+            alt="auth"
+            src={AuthIcon}
+            width="30"
+            height="30"
+            onClick={onAuth}
+          />
         </>
       )}
     </div>

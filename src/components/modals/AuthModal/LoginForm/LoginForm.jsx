@@ -1,5 +1,6 @@
 import { FormProvider, useForm } from "react-hook-form";
-import { useState } from "react";
+import React, { useState } from "react";
+import { signIn } from "next-auth/react";
 import Input from "@/components/ui/Input/Input";
 import * as S from "./styles";
 import { registerDynamicModal } from "@/helpers/useDynamicModal";
@@ -12,54 +13,25 @@ registerDynamicModal(
   import("../../ForgotPassword/ForgotPasswordModal")
 );
 
-const LoginForm = ({ provider }) => {
-  console.log(provider, "login form");
+const LoginForm = () => {
   const methods = useForm({ mode: "onSubmit" });
   const { handleSubmit, reset, setError } = methods;
   const { show: showForgotPassword } = useModal(MODALS.FORGOT_PASSWORD);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const onSubmit = async (data) => {
-    setIsProcessing(true);
-    const params = { ...data };
+  const onSubmit = async (e) => {
+    const { email, password } = e;
 
-    try {
-      const otpData = await checkOTPMutation({ username: data?.username });
-      if (otpData.is_enabled) {
-        showDoubleAuth({
-          onSubmit: (check_otp) => login(check_otp, params, true),
-          close: () => setIsProcessing(false),
-        });
-      } else {
-        login(params);
-      }
-    } catch (error_) {
-      if (isAxiosError(error_)) {
-        const status = error_.response?.status;
-        setIsProcessing(false);
-        switch (status) {
-          case 404: {
-            setError("username", {
-              message: "login_user_not_found_notification",
-              type: "siteTextKey",
-            });
-            notify(t("login_user_not_found_notification"), "error");
-            trackEvent({
-              category: "Login form",
-              action: "submit",
-              name: "Error: login_user_not_found",
-            });
-            break;
-          }
-          default:
-            notify("login_error_notification", "error");
-            trackEvent({
-              category: "Login form",
-              action: "submit",
-              name: "Error: unidentified error",
-            });
-        }
-      }
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (!result?.error) {
+      router.push("/dashboard"); // Перенаправление после входа
+    } else {
+      alert("Ошибка: " + result.error);
     }
   };
 
@@ -72,7 +44,7 @@ const LoginForm = ({ provider }) => {
     <FormProvider {...methods}>
       <S.Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <Input
-          name="username"
+          name="email"
           placeholder="e-mail"
           rules={{
             required: true,
@@ -98,6 +70,7 @@ const LoginForm = ({ provider }) => {
         <S.ForgotPassButton onClick={() => showForgotPassword()} type="button">
           Забули пароль?
         </S.ForgotPassButton>
+        <S.SubmitButton type="submit">OK</S.SubmitButton>
       </S.Form>
     </FormProvider>
   );

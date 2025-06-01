@@ -14,6 +14,7 @@ export const Wrapper = styled.div`
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   width: 400px;
   min-height: 626px;
   ${media.tabletMd} {
@@ -31,9 +32,9 @@ export const Container = styled.div`
 
 export const Content = styled.div`
   width: 100%;
-  height: 100%;
   padding: 0 24px 16px 24px;
   display: flex;
+  gap: 12px;
   flex-wrap: wrap;
   ${media.mobile} {
     padding: 0 16px 16px 16px;

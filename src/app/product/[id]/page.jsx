@@ -5,9 +5,9 @@ import ProviderNext from "@/components/Provider";
 
 const ProductPage = () => {
   return (
-    <ProviderNext>
+    <>
       <Product />
-    </ProviderNext>
+    </>
   );
 };
 

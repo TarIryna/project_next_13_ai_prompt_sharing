@@ -12,8 +12,7 @@ import * as S from "./styles";
 const AuthorizationModal = create(({ id, mode, res }) => {
   const [activeTab, setActiveTab] = useState(mode);
   const [googleRegMethod, setGoogleRegMethod] = useState(null);
-  // const isTablet = useMediaQuery({ maxWidth: 900 });
-  const { visible } = useModal(id);
+  const { visible, hide } = useModal(id);
   const { visible: isVisibleForgotPass } = useModal(MODALS.FORGOT_PASSWORD);
   const isHiddenModal = isVisibleForgotPass;
 
@@ -35,7 +34,7 @@ const AuthorizationModal = create(({ id, mode, res }) => {
       >
         <S.Wrapper>
           <S.Container>
-            <Head />
+            <Head close={hide} />
             <S.Content>
               {activeTab === LOGIN ? <Login /> : <Registration />}
             </S.Content>

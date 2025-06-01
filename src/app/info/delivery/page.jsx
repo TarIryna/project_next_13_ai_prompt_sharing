@@ -4,7 +4,7 @@ import * as S from "../styles";
 
 const InfoPage = (props) => {
   return (
-    <ProviderNext>
+    <>
       <S.Title>ДОСТАВКА І ОПЛАТА</S.Title>
       <S.PageWrapper className="container">
         <S.ContentPart>
@@ -53,7 +53,7 @@ const InfoPage = (props) => {
           <S.Text>Повна оплата на картку</S.Text>
         </S.ContentPart>
       </S.PageWrapper>
-    </ProviderNext>
+    </>
   );
 };
 

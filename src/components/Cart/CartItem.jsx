@@ -36,6 +36,7 @@ const CartItem = ({ admin, data, status }) => {
               width="16"
               height="16"
               onClick={deleteOrder}
+              alt="delete"
             />
           )}
         </div>

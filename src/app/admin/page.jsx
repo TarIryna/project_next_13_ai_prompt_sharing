@@ -6,9 +6,9 @@ import AdminPage from "@/components/Admin/AdminPage";
 const Admin = () => {
   return (
     <>
-      <ProviderNext>
-        <AdminPage />
-      </ProviderNext>
+      {/* <ProviderNext> */}
+      <AdminPage />
+      {/* </ProviderNext> */}
     </>
   );
 };

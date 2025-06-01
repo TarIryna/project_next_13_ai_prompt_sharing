@@ -1,10 +1,8 @@
 import * as S from "./styles";
-import { useEffect } from "react";
 import Link from "next/link";
 import LoginButton from "./LoginBtn";
 import FavouriteIcon from "@/assets/icons/favourite.svg";
 import CartIcon from "@/assets/icons/shopping_cart.svg";
-import { getProviders, setProviders } from "next-auth/react";
 
 const RightBlock = () => {
   const onFavourite = () => {};

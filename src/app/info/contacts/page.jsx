@@ -4,7 +4,7 @@ import * as S from "../styles";
 
 const ConatctsPage = (props) => {
   return (
-    <ProviderNext>
+    <>
       <S.Title>НАШІ КОНТАКТИ</S.Title>
       <S.PageWrapper className="container">
         <S.ContentPart>
@@ -23,7 +23,7 @@ const ConatctsPage = (props) => {
           </S.Text>
         </S.ContentPart>
       </S.PageWrapper>
-    </ProviderNext>
+    </>
   );
 };
 

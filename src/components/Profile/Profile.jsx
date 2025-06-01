@@ -1,14 +1,7 @@
-const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
-  return (
-    <section className="w-full">
-      <h1 className="head_text text-left">
-        <span className="blue_gradient">{name} Profile</span>
-      </h1>
-      <p className="desc text-left">{desc}</p>
+import * as S from "./styles";
 
-      <div className="mt-10 prompt_layout"></div>
-    </section>
-  );
+const Profile = () => {
+  return <S.Wrapper>My profile</S.Wrapper>;
 };
 
 export default Profile;

@@ -4,7 +4,7 @@ import * as S from "../styles";
 
 const InfoPage = (props) => {
   return (
-    <ProviderNext>
+    <>
       <S.Title>ПОВЕРНЕННЯ ТА ОБМІН</S.Title>
       <S.PageWrapper className="container">
         <S.ContentPart>
@@ -58,7 +58,7 @@ const InfoPage = (props) => {
           </ul>
         </S.ContentPart>
       </S.PageWrapper>
-    </ProviderNext>
+    </>
   );
 };
 

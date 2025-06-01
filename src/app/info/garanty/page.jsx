@@ -4,7 +4,7 @@ import * as S from "../styles";
 
 const Garanty = (props) => {
   return (
-    <ProviderNext>
+    <>
       <S.Title>Гарантії</S.Title>
       <S.PageWrapper className="container">
         <S.ContentPart>
@@ -232,7 +232,7 @@ const Garanty = (props) => {
           </ul>
         </S.ContentPart>
       </S.PageWrapper>
-    </ProviderNext>
+    </>
   );
 };
 

@@ -1,13 +1,11 @@
-"use client";
-
 import ProviderNext from "@/components/Provider";
-import CartPage from "@views/CartPage";
+import CartPage from "@/views/CartPage";
 
 const MyCart = () => {
   return (
-    <ProviderNext>
-      <CartPage />
-    </ProviderNext>
+    // <ProviderNext>
+    <CartPage />
+    // </ProviderNext>
   );
 };
 
