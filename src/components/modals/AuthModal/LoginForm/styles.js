@@ -5,16 +5,17 @@ export const Form = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
+  gap: 16px;
 `;
 export const ForgotPassButton = styled.button`
   position: relative;
   width: fit-content;
-  font-size: var(--ost-fs-sm);
-  line-height: var(--ost-lh-sm);
+  font-size: 12px;
   font-weight: 500;
-  background: var(--ost-green-gradient);
   margin-bottom: 20px;
-  color: white;
+  margin-left: 16px;
+  color: black;
+  text-decoration: underline;
   &:before {
     opacity: 0;
     content: "";

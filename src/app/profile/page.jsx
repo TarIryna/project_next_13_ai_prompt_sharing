@@ -1,49 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
 import ProviderNext from "@/components/Provider";
-import { useRouter } from "next/navigation";
-import OrdersList from "@/components/Cart/OrdersList";
 import Profile from "@/components/Profile/Profile";
 
 const MyProfile = () => {
-  // const [myPosts, setMyPosts] = useState([]);
-  // const [myOrders, setMyOrders] = useState([]);
-
-  // useEffect(() => {
-  //   const fetchPosts = async () => {
-  //     const response = fetch(`/api/users/${session?.user.id}/orders/all`);
-  //     const data = await response.json();
-
-  //     // setMyOrders(data);
-  //   };
-
-  //   if (session?.user.id) fetchPosts();
-  // }, [session?.user.id]);
-
-  // const handleEdit = (post) => {
-  //   router.push(`/update-prompt?id=${post._id}`);
-  // };
-
-  // const handleDelete = async (post) => {
-  //   const hasConfirmed = confirm(
-  //     "Are you sure you want to delete this prompt?"
-  //   );
-
-  //   if (hasConfirmed) {
-  //     try {
-  //       await fetch(`/api/prompt/${post._id.toString()}`, {
-  //         method: "DELETE",
-  //       });
-
-  //       const filteredPosts = myPosts.filter((item) => item._id !== post._id);
-
-  //       setMyPosts(filteredPosts);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // };
-  return <Profile />;
+  return (
+    <ProviderNext>
+      <Profile />
+    </ProviderNext>
+  );
 };
 
 export default MyProfile;

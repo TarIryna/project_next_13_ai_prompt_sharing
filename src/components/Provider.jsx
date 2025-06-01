@@ -2,6 +2,7 @@
 import { SessionProvider } from "next-auth/react";
 import NiceModal from "@ebay/nice-modal-react";
 import { createContext, useEffect, useState } from "react";
+import UserSessionLoader from "@/components/UserSessionLoader";
 
 // ** Store Imports
 import { Provider } from "react-redux";
@@ -25,18 +26,21 @@ const ProviderNext = ({ children, session }) => {
 
   return (
     <Provider store={store}>
-      <LastGoogleAccountContext.Provider
-        value={{
-          lastGoogleAccountEmail,
-          handlerWrite: () => {
-            setIsCallGoogle(true);
-          },
-        }}
-      >
-        <NiceModal.Provider>
-          <SessionProvider session={session}>{children}</SessionProvider>
-        </NiceModal.Provider>
-      </LastGoogleAccountContext.Provider>
+      <SessionProvider session={session}>
+        <LastGoogleAccountContext.Provider
+          value={{
+            lastGoogleAccountEmail,
+            handlerWrite: () => {
+              setIsCallGoogle(true);
+            },
+          }}
+        >
+          <NiceModal.Provider>
+            <UserSessionLoader />
+            {children}
+          </NiceModal.Provider>
+        </LastGoogleAccountContext.Provider>
+      </SessionProvider>
     </Provider>
   );
 };

@@ -2,28 +2,25 @@ import User from "@/models/user";
 import { connectToDB } from "@/utils/database";
 
 export const PATCH = async (request, { params }) => {
-  const { name, surname, phone, isViber, city, adress } = await request.json();
+  const data = await request.json();
+  const newUser = data?.user;
 
   try {
     await connectToDB();
-    // Find the existing product by ID
-    const existingUser = await User.findById(params.id);
-    if (!existingUser) {
+
+    const updatedUser = await User.findByIdAndUpdate(
+      params.id,
+      { $set: newUser }, // безопасно обновляем только переданные поля
+      { new: true, runValidators: true } // вернуть обновлённый документ + валидация схемы
+    );
+
+    if (!updatedUser) {
       return new Response("User not found", { status: 404 });
     }
 
-    // Update user with new data
-    existingUser.name = name;
-    existingUser.surname = surname;
-    existingUser.phone = phone;
-    existingUser.isViber = isViber;
-    existingUser.city = city;
-    existingUser.adress = adress;
-
-    await existingUser.save();
-
-    return new Response(JSON.stringify(existingUser), { status: 200 });
+    return new Response(JSON.stringify(updatedUser), { status: 200 });
   } catch (error) {
+    console.error("Update error:", error);
     return new Response("Error Updating User", { status: 500 });
   }
 };

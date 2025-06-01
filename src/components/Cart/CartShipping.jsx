@@ -13,7 +13,7 @@ const CartShipping = () => {
   const [regions, setRegions] = useState(null);
   const [value, setValue] = useState("");
   const [city, setCity] = useState(userCity ?? "");
-  const [adresses, setAddresses] = useState([]);
+  const [adresses, setAdresses] = useState([]);
   const [adress, setAdress] = useState(userAdress ?? "");
   const [showSelects, setShowSelects] = useState(true);
 
@@ -25,10 +25,10 @@ const CartShipping = () => {
     if (data) setRegions(data.data);
   };
 
-  const fetchAdress = async (id) => {
+  const fetchAddress = async (id) => {
     const response = await fetch(`/api/shipping/novaposhta/adress?query=${id}`);
     const data = await response?.json();
-    if (data) setAddresses(data.data);
+    if (data) setAdresses(data.data);
   };
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const CartShipping = () => {
   useEffect(() => {
     if (!city) return;
     if (!city.ref) return;
-    fetchAdress(city.ref);
+    fetchAddress(city.ref);
   }, [city]);
 
   const renderOptions = (array, name) => (

@@ -1,5 +1,4 @@
 import { forwardRef } from "react";
-import Spinner from "~/assets/icons/circle-loader.svg";
 import { StyledButton } from "./styles";
 
 const Button = forwardRef(
@@ -30,7 +29,7 @@ const Button = forwardRef(
       {leftIcon}
       {children}
       {rightIcon}
-      {isLoading && <Spinner />}
+      {/* {isLoading && createSpinner()} */}
     </StyledButton>
   )
 );

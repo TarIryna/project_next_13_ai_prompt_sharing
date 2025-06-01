@@ -1,8 +1,7 @@
 "use client";
-import ProviderNext from "@/components/Provider";
 import * as S from "../styles";
 
-const ConatctsPage = (props) => {
+const ContactsPage = (props) => {
   return (
     <>
       <S.Title>НАШІ КОНТАКТИ</S.Title>
@@ -27,4 +26,4 @@ const ConatctsPage = (props) => {
   );
 };
 
-export default ConatctsPage;
+export default ContactsPage;

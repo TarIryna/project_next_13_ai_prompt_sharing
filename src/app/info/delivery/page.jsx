@@ -1,8 +1,7 @@
 "use client";
-import ProviderNext from "@/components/Provider";
 import * as S from "../styles";
 
-const InfoPage = (props) => {
+const DeliveryPage = (props) => {
   return (
     <>
       <S.Title>ДОСТАВКА І ОПЛАТА</S.Title>
@@ -57,4 +56,4 @@ const InfoPage = (props) => {
   );
 };
 
-export default InfoPage;
+export default DeliveryPage;

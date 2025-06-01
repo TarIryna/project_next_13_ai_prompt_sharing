@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 import { useModal } from "@ebay/nice-modal-react/lib/esm";
 import { registerDynamicModal } from "@/helpers/useDynamicModal";
 import { MODALS, LOGIN } from "@/constants/constants";
 import { AuthButton } from "./styles";
 import AuthIcon from "@/assets/icons/auth.svg";
+import LoginIcon from "@/assets/icons/login.svg";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useUser } from "@/store/selectors";
 
 registerDynamicModal(
   MODALS.AUTHORIZATION,
@@ -13,30 +14,35 @@ registerDynamicModal(
 );
 
 const LoginButton = () => {
-  const { data: session } = useSession();
   const { show: showAuth } = useModal(MODALS.AUTHORIZATION);
+  const { push } = useRouter();
+  const { isAuth, user } = useUser();
 
   const onAuth = () => {
     showAuth({ mode: LOGIN });
   };
 
+  const onProfile = () => {
+    push("/profile");
+  };
+
   return (
     <div>
-      {session?.user ? (
+      {isAuth ? (
         <Link href="/profile">
           <AuthButton
-            src={session?.user?.image ?? AuthIcon}
+            src={user?.image ?? AuthIcon}
             alt="auth button"
             width="25"
             height="25"
-            onClick={signOut}
+            onClick={onProfile}
           />
         </Link>
       ) : (
         <>
           <AuthButton
             alt="auth"
-            src={AuthIcon}
+            src={LoginIcon}
             width="30"
             height="30"
             onClick={onAuth}

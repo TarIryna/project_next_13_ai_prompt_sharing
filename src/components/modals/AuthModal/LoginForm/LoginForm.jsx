@@ -7,6 +7,7 @@ import { registerDynamicModal } from "@/helpers/useDynamicModal";
 import { useModal } from "@ebay/nice-modal-react/lib/esm";
 import { useFormFieldNavigation } from "@/hooks";
 import { MODALS } from "@/constants/constants";
+import { toast } from "react-hot-toast";
 
 registerDynamicModal(
   MODALS.FORGOT_PASSWORD,
@@ -14,8 +15,16 @@ registerDynamicModal(
 );
 
 const LoginForm = () => {
+  const { hide } = useModal(MODALS.AUTHORIZATION);
+
   const methods = useForm({ mode: "onSubmit" });
-  const { handleSubmit, reset, setError } = methods;
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = methods;
+
   const { show: showForgotPassword } = useModal(MODALS.FORGOT_PASSWORD);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -28,11 +37,11 @@ const LoginForm = () => {
       password,
     });
 
-    if (!result?.error) {
-      router.push("/dashboard"); // Перенаправление после входа
-    } else {
+    if (result?.error) {
       alert("Ошибка: " + result.error);
     }
+    toast.success("Успішно!");
+    hide();
   };
 
   const { formInputs, handleKeyDown } = useFormFieldNavigation(
@@ -44,28 +53,17 @@ const LoginForm = () => {
     <FormProvider {...methods}>
       <S.Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <Input
-          name="email"
           placeholder="e-mail"
-          rules={{
-            required: true,
-          }}
-          inputMode="email"
+          {...register("email", { required: true })}
           tabIndex={1}
           enterKeyHint="next"
-          inputId={formInputs[0]?.id}
-          onKeyDown={(event) => handleKeyDown(event, 0)}
         />
         <Input
-          name="password"
           placeholder="пароль"
-          rules={{
-            required: true,
-          }}
+          {...register("password", { required: true })}
           tabIndex={2}
           enterKeyHint="done"
           type="password"
-          inputId={formInputs[1]?.id}
-          onKeyDown={(event) => handleKeyDown(event, 1)}
         />
         <S.ForgotPassButton onClick={() => showForgotPassword()} type="button">
           Забули пароль?

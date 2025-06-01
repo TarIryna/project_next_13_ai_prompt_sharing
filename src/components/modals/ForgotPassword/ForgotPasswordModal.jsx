@@ -1,42 +1,57 @@
 import { create, useModal } from "@ebay/nice-modal-react";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ReactModal from "@/components/modals/ReactModal";
-import { useMediaQuery } from "@/helpers/useMediaQuery";
-import { LOGIN, MODALS } from "@/constants/constants";
-import { AuthModalContext } from "../AuthModal/contexts/authContext";
+import { Wrapper, Container, Content } from "../styles";
+import { FormProvider, useForm } from "react-hook-form";
+import Head from "../components/Head/Head";
+import { Input, Button } from "@/components/ui";
 import * as S from "./styles";
 
-const AuthorizationModal = create(({ id, mode, res }) => {
-  const [activeTab, setActiveTab] = useState(mode);
-  const [googleRegMethod, setGoogleRegMethod] = useState(null);
-  const isTablet = useMediaQuery({ maxWidth: 900 });
-  const { visible } = useModal(id);
-  const { visible: isVisibleForgotPass } = useModal(MODALS.FORGOT_PASSWORD);
-  const isHiddenModal = isVisibleForgotPass;
+const ForgorPassword = create(({ id }) => {
+  const { visible, hide } = useModal(id);
 
-  useEffect(() => {
-    if (visible) {
-      setActiveTab(mode);
-    }
-  }, [mode, visible]);
+  const methods = useForm({ mode: "onSubmit" });
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    setError,
+    reset,
+  } = methods;
+
+  const onSubmit = (formData) => {
+    console.log(formData);
+  };
 
   return (
-    <ReactModal id={id} closeOnClickOutside={false} isHidden={isHiddenModal}>
-      <AuthModalContext.Provider
-        value={{
-          res,
-          openGame,
-          activeTab,
-          setActiveTab,
-          googleRegMethod,
-          setGoogleRegMethod,
-        }}
-      >
-        <S.Wrapper></S.Wrapper>
-      </AuthModalContext.Provider>
+    <ReactModal id={id} closeOnClickOutside={false}>
+      <Wrapper>
+        <Container>
+          <Head close={hide} title="Відновлення паролю" />
+          <Content>
+            <S.Title>
+              Введіть ваш email, з яким ви зареєструвались на сайті:
+            </S.Title>
+            <FormProvider {...methods}>
+              <S.Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+                <Input
+                  placeholder="email"
+                  {...register("email", { required: true })}
+                  tabIndex={1}
+                  enterKeyHint="done"
+                  type="email"
+                />
+                <Button type="submit">
+                  Відправити запит на відновлення паролю
+                </Button>
+              </S.Form>
+            </FormProvider>
+          </Content>
+        </Container>
+      </Wrapper>
     </ReactModal>
   );
 });
 
-export default AuthorizationModal;
+export default ForgorPassword;

@@ -3,11 +3,11 @@ import { create, useModal } from "@ebay/nice-modal-react";
 import React, { useEffect, useState } from "react";
 import ReactModal from "../ReactModal";
 // import { useMediaQuery } from "@/helpers/useMediaQuery";
-import { LOGIN, MODALS } from "@/constants/constants";
+import { LOGIN, MODALS, REGISTRATION } from "@/constants/constants";
 import { AuthModalContext } from "./contexts/authContext";
-import Login from "./components/Login/Login";
-import Head from "./components/Head/Head";
-import * as S from "./styles";
+import { Login, Registration } from "./components";
+import Head from "../components/Head/Head";
+import { Wrapper, Container, Content, Link } from "../styles";
 
 const AuthorizationModal = create(({ id, mode, res }) => {
   const [activeTab, setActiveTab] = useState(mode);
@@ -32,14 +32,19 @@ const AuthorizationModal = create(({ id, mode, res }) => {
           setGoogleRegMethod,
         }}
       >
-        <S.Wrapper>
-          <S.Container>
-            <Head close={hide} />
-            <S.Content>
+        <Wrapper>
+          <Container>
+            <Head close={hide} title="Авторизація" />
+            <Content>
               {activeTab === LOGIN ? <Login /> : <Registration />}
-            </S.Content>
-          </S.Container>
-        </S.Wrapper>
+              {mode === LOGIN && (
+                <Link onClick={() => setActiveTab(REGISTRATION)}>
+                  Зареєструватись
+                </Link>
+              )}
+            </Content>
+          </Container>
+        </Wrapper>
       </AuthModalContext.Provider>
     </ReactModal>
   );

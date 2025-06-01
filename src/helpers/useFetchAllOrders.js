@@ -7,6 +7,7 @@ export const useFetchAllOrders = async (id) => {
   changeOrderIsLoadingAction(true);
   const response = await fetch(`/api/users/${id}/orders/all`);
   const data = await response.json();
+  console.log(data);
 
   if (data) {
     const newOrder = data.filter((item) => item.status === "new");

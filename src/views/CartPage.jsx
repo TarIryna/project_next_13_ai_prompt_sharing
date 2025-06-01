@@ -1,6 +1,6 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFetchAllOrders } from "@/helpers/useFetchAllOrders";
 import Loading from "@/app/profile/loading";
 import CartNew from "@/components/Cart/CartNew";
@@ -9,6 +9,7 @@ import CartSuccess from "@/components/Cart/CartSuccess";
 import CartError from "@/components/Cart/CartError";
 import CartEmpty from "@/components/Cart/CartEmpty";
 import { fetchCartItemNotauth } from "@/helpers/useFetchProduct";
+import { PageContainer } from "@/components";
 
 import {
   useOrderIsError,
@@ -18,52 +19,62 @@ import {
   useSuccessOrders,
 } from "@/store/selectors/orders";
 import { loginUserAction } from "@/store/actions/user";
+import { useUser } from "@/store/selectors";
 
 const CartPage = ({ data, handleEdit }) => {
-  // const { data: session } = useSession();
-  // const getNewOrder = (data) => {
-  //   const items = data?.split(";");
-  //   const newOrder = [];
-  //   if (!items) return;
-  //   items?.map((item) => {
-  //     const data = item.split(",");
-  //     data?.map((item) => console.log(item));
-  //   });
-  // };
+  const { isAuth, user } = useUser();
+  const [localStorageData, setLocalStorageData] = useState([]);
 
-  // if (session) loginUserAction(session);
-  // else {
-  //   const localStorageData = localStorage?.getItem("cart");
-  //   if (localStorageData) getNewOrder(localStorageData);
-  // }
+  const newOrders = useNewOrders();
+  const progressOrders = useProgressOrders();
+  const successOrders = useSuccessOrders();
+  const isLoading = useOrderIsLoading();
+  const isError = useOrderIsError();
 
-  // const newOrders = useNewOrders();
-  // const progressOrders = useProgressOrders();
-  // const successOrders = useSuccessOrders();
-  // const isLoading = useOrderIsLoading();
-  // const isError = useOrderIsError();
+  const getNewOrder = (data) => {
+    const items = !!progressOrders?.length ? [...progressOrders] : [];
+    data.split(";").map((item) => {
+      const obj = {};
+      item.split(",").forEach((pair) => {
+        const [key, value] = pair.split("=");
+        obj[key] = value === "undefined" ? "" : value;
+      });
+      items.push(obj);
+    });
+    setLocalStorageData(items);
+  };
 
-  // useEffect(() => {
-  //   if (session?.id) useFetchAllOrders(session?.id);
-  // }, [session?.id]);
+  useEffect(() => {
+    if (user?.id) useFetchAllOrders(user?.id);
+  }, [user?.id]);
+
+  useEffect(() => {
+    const localStorageData =
+      typeof window !== "undefined" && localStorage.getItem("cart");
+    if (localStorageData) {
+      getNewOrder(localStorageData);
+    }
+  }, [isAuth]);
 
   return (
-    <section className="w-full">
-      <div className="text-center">Кошик</div>
-      {/* {isLoading ? (
+    <PageContainer>
+      <h2>Кошик</h2>
+      {isLoading ? (
         <Loading />
       ) : isError ? (
         <CartError />
       ) : newOrders?.length > 0 ? (
         <CartNew />
       ) : progressOrders?.length > 0 ? (
-        <CartInProcess />
+        <CartInProcess orders={progressOrders} />
       ) : successOrders?.length > 0 ? (
         <CartSuccess />
+      ) : !!localStorageData?.length ? (
+        <CartInProcess orders={localStorageData} />
       ) : (
         <CartEmpty />
-      )} */}
-    </section>
+      )}
+    </PageContainer>
   );
 };
 export default CartPage;

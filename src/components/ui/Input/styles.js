@@ -16,11 +16,28 @@ export const InputWrapper = styled.div`
   height: 40px;
 `;
 
+export const Recommended = styled.h4``;
+
+export const LabelInfo = styled.h4`
+  display: flex;
+  align-items: center;
+  color: var(--White);
+  font-size: 12px;
+  line-height: 16px;
+  padding-top: 4px;
+  & svg {
+    margin-right: 6px;
+  }
+
+  ${(props) => props.hasError && `opacity: 0`};
+`;
+
 export const InputElement = styled.input(
   ({ isShowSuccess, isError, hasRightIcon, isLightDisabled }) => css`
     border: 1px solid ${isShowSuccess ? "green" : isError ? "red" : "grey"};
     padding: ${hasRightIcon ? "10px 38px 10px 12px" : "10px 12px"};
-    background-color: var(--ost-grey-600);
+    background: rgb(238, 225, 225);
+    border: 1px solid rgb(174, 174, 174);
     font-size: 14px;
     line-height: 120%;
     font-weight: 500;
@@ -79,3 +96,45 @@ export const ShowPass = styled(RightIconWrapper)`
     }
   }
 `;
+
+export const Input = styled.input`
+  flex: 1 1 auto;
+  width: 100%;
+  height: 44px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  color: black;
+  border-radius: 16px;
+  cursor: initial;
+  ::placeholder {
+    color: grey;
+  }
+  &:focus {
+    outline: none;
+  }
+  &:-webkit-autofill,
+  &:-webkit-autofill:focus {
+    transition: background-color 0s 60000000s, color 0s 60000000s;
+  }
+
+  padding: ${(props) =>
+    props.type === "password" || props.show
+      ? `0px 48px 0 16px`
+      : props.doubleIcon
+      ? `0px 48px`
+      : "0px 16px"};
+`;
+
+export const ButtonShow = styled.button`
+  display: flex;
+  flex-direction: table-column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 16px;
+  bottom: 7px;
+  width: 16px;
+`;
+
+export const Error = styled.div``;

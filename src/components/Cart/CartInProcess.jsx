@@ -2,21 +2,21 @@ import { useProgressOrders } from "@/store/selectors/orders";
 import { useUser } from "@/store/selectors";
 import { changeOrderIsLoadingAction } from "@/store/actions/orders";
 import { changeUserDeliveryDataAction } from "@/store/actions/user";
-import { showToast } from "react-next-toast";
+import { toast } from "react-hot-toast";
 import { useFetchAllOrders } from "@/helpers/useFetchAllOrders";
 import { useChangeOrderStatus } from "@/helpers/useChangeOrderStatus";
+import { FormProvider, useForm } from "react-hook-form";
 
 import CartList from "./CartList";
 import CartShipping from "./CartShipping";
 import CartClientInfo from "./CartClientInfo";
 import { useState } from "react";
 
-const CartInProcess = () => {
-  const user = useUser()?.user?.user;
-  const userId = user?.id;
-  const products = useProgressOrders();
-
+const CartInProcess = ({ orders }) => {
+  console.log("in progress");
   const [needUpdate, setNeedUpdate] = useState(false);
+  const methods = useForm({ mode: "onSubmit" });
+  const { handleSubmit, register } = methods;
 
   const handleOrder = (deliveryData) => {
     const orderId = generateId();
@@ -92,11 +92,11 @@ const CartInProcess = () => {
       adress,
     };
     const isFullInfo = checkInfo(orderData);
-    if (!isFullInfo) showToast.error("Не вся інформація заповнена");
+    if (!isFullInfo) toast.error("Не вся інформація заповнена");
     else {
       // const result = confirm("Зберегти реквізити доставки?");
       updateUser(orderData, userId);
-      showToast.info("Очікуйте підтвердження замовлення!");
+      toast.info("Очікуйте підтвердження замовлення!");
       handleOrder(orderData);
     }
     // else handleOrder("new");
@@ -105,11 +105,13 @@ const CartInProcess = () => {
 
   return (
     <div>
-      <form className="cart_shipping__form" onSubmit={onSubmit}>
-        <CartList status="progress" products={products} />
-        <CartClientInfo needUpdate={needUpdate} />
-        <CartShipping />
-      </form>
+      <FormProvider>
+        <form className="cart_shipping__form" onSubmit={onSubmit}>
+          <CartList status="progress" products={orders} />
+          {/* <CartClientInfo needUpdate={needUpdate} register={register} /> */}
+          <CartShipping />
+        </form>
+      </FormProvider>
     </div>
   );
 };

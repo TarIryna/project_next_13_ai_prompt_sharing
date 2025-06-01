@@ -1,6 +1,7 @@
 "use client";
+import { Orders } from "@/components/Profile";
 
-const Orders = () => {
-  return <div>Orders</div>;
+const OrdersPage = () => {
+  return <Orders />;
 };
-export default Orders;
+export default OrdersPage;

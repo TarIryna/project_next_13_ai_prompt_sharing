@@ -1,8 +1,9 @@
-import CartItem from "./CartItem";
+import CartItem from "./CartItem/CartItem";
 
 const CartList = ({ products, status }) => {
   const total = products.reduce(
-    (accumulator, item) => accumulator + item.price * item.quantity,
+    (accumulator, item) =>
+      accumulator + Number(item.price) * Number(item.quantity ?? 1),
     0
   );
 

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { media } from "@/styles/mediaBrakepoints";
 
 export const Wrapper = styled.div`
@@ -16,10 +16,8 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 400px;
-  min-height: 626px;
-  ${media.tabletMd} {
-    min-height: 712px;
-  }
+  min-height: 500px;
+  background: rgb(229, 229, 229);
   ${media.mobile} {
     height: 100dvh;
     width: 100vw;
@@ -39,4 +37,11 @@ export const Content = styled.div`
   ${media.mobile} {
     padding: 0 16px 16px 16px;
   }
+`;
+
+export const Link = styled.div`
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+  margin: 0 auto;
 `;

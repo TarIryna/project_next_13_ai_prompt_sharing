@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { showToast } from "react-next-toast";
+import { toast } from "react-hot-toast";
 import { useUser } from "@/store/selectors";
 
 const Sizes = ({ sizes, item }) => {
@@ -9,21 +9,12 @@ const Sizes = ({ sizes, item }) => {
   const onButtonClick = async () => {
     if (!userId) {
       const currentCart = localStorage?.getItem("cart");
-      if (!currentCart) {
-        localStorage?.setItem(
-          "cart",
-          `code=${item._id},size=${size},price=${item.price},image=${
-            item.small_image ?? item.image
-          }`
-        );
-      } else {
-        localStorage?.setItem(
-          "cart",
-          `${currentCart};code=${item._id},size=${size},price=${
-            item.price
-          },image=${item.small_image ?? item.image}`
-        );
-      }
+      const image = item.small_image ?? item.image ?? item.image1;
+      const newItem = `code=${item._id},size=${size},price=${item.price},image=${image}`;
+      localStorage?.setItem(
+        "cart",
+        currentCart ? `${currentCart};${newItem}` : newItem
+      );
     }
     try {
       const response = await fetch("/api/order/new", {
@@ -40,13 +31,13 @@ const Sizes = ({ sizes, item }) => {
       });
 
       if (response.ok) {
-        showToast.success("Товар додано у кошик!");
+        toast.success("Товар додано у кошик!");
       }
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(sizes);
+
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       {!!sizes && <p className="product_sizes">Розміри в наявності:</p>}

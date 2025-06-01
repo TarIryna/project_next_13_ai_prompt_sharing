@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { verifyPassword } from "@/helpers/verifyPassword";
+import { loginUserAction, logoutUserAction } from "@/store/actions/user";
 
 import User from "@/models/user";
 import { connectToDB } from "@/utils/database";
@@ -22,17 +24,29 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const { email, password } = credentials;
+        await connectToDB();
+        console.log(credentials.email);
+        const user = await User.findOne({ email: credentials.email });
+        console.log(user);
 
-        // Проверка пользователя (замените на свою логику, например, с базой данных)
-        const user = { id: 1, name: "Test User", email: "test@example.com" };
-        const isPasswordValid = password === "password123"; // Замените на реальную проверку
-
-        if (email === user.email && isPasswordValid) {
-          return user; // Успешная авторизация
+        if (!user || !user.password) {
+          throw new Error("Пользователь не найден");
         }
 
-        throw new Error("Неверный email или пароль"); // Ошибка авторизации
+        const isValid = await verifyPassword(
+          credentials.password,
+          user.password
+        );
+
+        if (!isValid) {
+          throw new Error("Неверный пароль");
+        }
+
+        return {
+          id: user._id.toString(),
+          email: user.email,
+          name: user.username,
+        };
       },
     }),
   ],
@@ -51,20 +65,24 @@ const handler = NextAuth({
       const sessionUser = await User.findOne({ email: session.user.email });
       session.user = sessionUser;
       session.id = sessionUser._id.toString();
+      if (!!session.user) {
+        loginUserAction();
+      } else {
+        logoutUserAction();
+      }
 
       return session;
     },
     async signIn({ account, profile, user, credentials }) {
       try {
         await connectToDB();
-        console.log("connected for auth");
+        const email = profile?.email ?? credentials?.email ?? user?.email;
 
         // check if user already exists
-        const userExists = await User.findOne({ email: profile.email });
+        const userExists = await User.findOne({ email });
 
         // if not, create a new document and save user in MongoDB
-        if (!userExists) {
-          console.log("no user");
+        if (!userExists && provider !== "credentials") {
           await User.create({
             email: profile.email,
             username: profile.name.replace(" ", "").toLowerCase(),

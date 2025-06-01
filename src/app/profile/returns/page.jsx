@@ -1,6 +1,7 @@
 "use client";
+import { Returns } from "@/components/Profile";
 
-const Returns = () => {
-  return <div>Returns</div>;
+const ReturnsPage = () => {
+  return <Returns />;
 };
-export default Returns;
+export default ReturnsPage;

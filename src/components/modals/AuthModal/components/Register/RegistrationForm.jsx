@@ -1,233 +1,125 @@
-import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 
 import { FormProvider, useForm } from "react-hook-form";
-// import { patterns, ROUTES } from "~/common/constants";
-import { useCommonStore, useProfile } from "~/common/contexts";
-import { ECookie } from "~/common/enums";
-import { useFormFieldNavigation, useTranslations } from "~/common/hooks";
-import { Input, InputPassword, Select } from "~/ui";
-import { useAuthModalContext } from "../../context/AuthModalContext";
-import { AuthorizationMethod, Terms } from "../index";
-import { useRegistration } from "./helpers";
-import { CurrencyBox, Form, Row } from "./styles";
+import { Button, Input } from "@/components/ui";
+import { useAuthModalContext } from "../../contexts/authContext";
+import { signIn } from "next-auth/react";
+import * as S from "./styles";
+import { toast } from "react-hot-toast";
+import { useModal } from "@ebay/nice-modal-react";
+import { MODALS } from "@/constants/constants";
 
 const RegistrationForm = () => {
-  const { googleRegMethod, setGoogleRegMethod, res, openGame } =
+  const { googleRegMethod, setGoogleRegMethod, res } =
     useAuthModalContext() || {};
   const [isProcessing, setIsProcessing] = useState(false);
-  const { isGiveaway } = useCommonStore();
-  const { isAuth, userProfile } = useProfile();
-  const { push } = useRouter();
   const recaptchaRef = useRef < ReCAPTCHA > null;
-  const t = useTranslations();
+  const methods = useForm({ mode: "onSubmit" });
+  const { hide } = useModal(MODALS.AUTHORIZATION);
 
-  const methods = useForm < IRegistrationFormFields > { mode: "onSubmit" };
-
-  const { handleSubmit, setError, watch, setValue } = methods;
-
-  const usernameWatch = watch("username");
-  const countryWatch = watch("country");
-  const emailWatch = watch("email");
-
-  const {
-    getItemOrSetUndefined,
-    onGoogleSubmit,
-    registerHandler,
-    signInGoogleHandler,
-    onChangeUsername,
-    onChangeEmail,
-    resetState,
-    onClose,
-    showGiveaway,
-    renderError,
-    defCountry,
-    currentLanguageID,
-    isLoginWithGoogle,
-  } = useRegistration({
-    methods,
-    countries,
-    setGoogleRegMethod,
-    setIsProcessing,
-    res,
-  });
+  const { handleSubmit, register } = methods;
 
   const onSubmit = async (data) => {
-    const redirectUrl = getItemOrSetUndefined(ECookie.RedirectUrl);
-    let registrationUrl;
-    if (redirectUrl) {
-      registrationUrl = decodeURIComponent(redirectUrl);
-    }
     setIsProcessing(true);
-    const captcha = await recaptchaRef?.current?.executeAsync();
-    const generalData = {
-      captcha,
-      language: currentLanguageID,
-      country: data.country.value.id,
-      currency: data.currency.value,
-      stag: getItemOrSetUndefined(ECookie.Stag),
-      registration_url: registrationUrl,
-    };
-
-    if (googleRegMethod) {
-      const params = {
-        ...googleRegMethod,
-        ...generalData,
-        username: data.username,
-      };
-      const response = await signInGoogleHandler(params);
-      renderError(response);
-    } else {
-      trackEvent({
-        category: "Registration form",
-        action: "submit",
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       });
-      try {
-        const body = {
-          ...data,
-          ...generalData,
-        };
-        const error = await registerHandler(body);
-        renderError(error);
-        if (error) {
-          resetState();
-        } else {
-          if (isAuth) {
-            onClose();
-            trackEvent({
-              category: "Registration form",
-              action: "submit",
-              name: "Success",
-            });
-            if (isGiveaway) {
-              showGiveaway();
-            } else {
-              await push(ROUTES.WALLET());
-            }
-          }
-        }
-        window.scrollTo(0, 0);
-      } catch (error) {
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        alert(result.message || "Ошибка при регистрации");
         setIsProcessing(false);
-
-        // TODO: Fix types
-        // @ts-ignore
-        const errorText = JSON.parse(error?.request?.response?.fields);
-        if (errorText) {
-          for (const key in errorText) {
-            setError(key, {
-              message: errorText?.[key]?.[0],
-              type: "siteTextKey",
-            });
-            trackEvent({
-              category: "Registration form",
-              action: "submit",
-              name: `Error: ${errorText?.[key]?.[0]}`,
-            });
-          }
-        }
+        return;
       }
-    }
-  };
 
-  const getDefOptions = () => {
-    const country = countryWatch || defCountry;
+      // После успешной регистрации выполнить вход
+      const signInResult = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      });
 
-    return country.value.currency;
-  };
-
-  const { formInputs, handleKeyDown } = useFormFieldNavigation(
-    4,
-    handleSubmit(onSubmit)
-  );
-
-  useEffect(() => {
-    if (isAuth) {
-      onClose();
-      if (isGiveaway) {
-        showGiveaway();
+      if (signInResult?.error) {
+        alert("Ошибка входа после регистрации: " + signInResult.error);
       } else {
-        if (isLoginWithGoogle) {
-          openGame && openGame({ userInfo: userProfile });
-        } else {
-          push(ROUTES.WALLET());
-        }
+        toast.success("Успішно!");
+        hide();
       }
+    } catch (error) {
+      alert("Ошибка сети: " + error.message);
     }
-  }, [isAuth]);
+    setIsProcessing(false);
+  };
 
   return (
     <FormProvider {...methods}>
-      <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+      <S.Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         {!googleRegMethod && (
           <Input
-            name="email"
-            placeholder={t("registration_form_email")}
-            rules={{
-              required: true,
-              pattern: patterns?.email,
-            }}
-            enterKeyHint="next"
+            type="email"
+            placeholder="e-mail"
+            {...register("email", { required: true })}
             tabIndex={1}
-            inputMode="email"
-            onKeyDown={(event) => handleKeyDown(event, 0)}
-            inputId={formInputs[0]?.id}
-            onChange={(e) => onChangeEmail(e)}
-            isValidChecker={!!emailWatch}
+            enterKeyHint="next"
           />
         )}
         <Input
-          name="username"
-          placeholder={t("registration_form_username")}
-          rules={{
-            required: true,
-            minLength: 5,
-            maxLength: 15,
-            validate: (value) =>
-              patterns.username.test(value) ||
-              "registration_form_username_validation",
-          }}
-          onChange={(e) => onChangeUsername(e)}
+          type="text"
+          placeholder="username"
+          {...register("username", { required: true })}
           tabIndex={2}
           enterKeyHint="next"
-          inputId={formInputs[1]?.id}
-          onKeyDown={(event) => handleKeyDown(event, 1)}
-          isValidChecker={!!usernameWatch}
-          replaceErrorPart={{
-            minLength: 5,
-            maxLength: 15,
-          }}
         />
-
         {!googleRegMethod && (
-          <InputPassword
-            name="password"
-            placeholder={t("registration_form_password")}
-            rules={{
-              required: true,
-            }}
+          <Input
+            type="password"
+            placeholder="пароль"
+            {...register("password", { required: true })}
             tabIndex={3}
             enterKeyHint="next"
           />
         )}
-        <Row>
-          <CurrencyBox>
-            <Select
-              name="currency"
-              placeholder={t("registration_form_currency")}
-              rules={{ required: true }}
-              items={getDefOptions()}
-              defaultValue={getDefCurrency()}
-            />
-          </CurrencyBox>
-        </Row>
-        <Terms />
-        <AuthorizationMethod
-          isLoading={isProcessing}
-          submitButtonTitle={t("registration_form_button")}
-          onGoogleSubmit={onGoogleSubmit}
-          isGoogleRegister={!!googleRegMethod}
+        <S.Row>
+          <Input
+            type="text"
+            placeholder="Ім'я"
+            {...register("name", { required: true })}
+            tabIndex={4}
+            enterKeyHint="next"
+          />
+          <Input
+            type="text"
+            placeholder="Прізвище"
+            {...register("surname", { required: true })}
+            tabIndex={5}
+            enterKeyHint="next"
+          />
+        </S.Row>
+        <Input
+          type="tel"
+          placeholder="Телефон"
+          {...register("phone", { required: true })}
+          tabIndex={6}
+          enterKeyHint="next"
+        />
+        <Input
+          type="text"
+          placeholder="Місто"
+          {...register("city", { required: true })}
+          tabIndex={7}
+          enterKeyHint="next"
+        />
+        <Input
+          type="text"
+          placeholder="Адреса доставки"
+          {...register("adress", { required: true })}
+          tabIndex={8}
+          enterKeyHint="next"
         />
         {!!process.env.NEXT_PUBLIC_GOOGLE_CAPTCHA && (
           <ReCAPTCHA
@@ -237,7 +129,8 @@ const RegistrationForm = () => {
             ref={recaptchaRef}
           />
         )}
-      </Form>
+        <Button>Зареєструватись</Button>
+      </S.Form>
     </FormProvider>
   );
 };

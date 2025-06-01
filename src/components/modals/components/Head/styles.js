@@ -1,8 +1,8 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 export const Title = styled.h2`
   font-size: 24px;
-  color: white;
+  color: black;
   font-weight: 800;
   text-align: center;
 `;
@@ -10,6 +10,7 @@ export const Title = styled.h2`
 export const TitleWrapper = styled.div`
   padding: 10px 0;
   position: relative;
+  width: 100%;
 `;
 
 export const Icon = styled.div`
@@ -18,4 +19,5 @@ export const Icon = styled.div`
   top: 10px;
   background: white;
   border-radius: 50%;
+  cursor: pointer;
 `;

@@ -3,9 +3,9 @@ import CartPage from "@/views/CartPage";
 
 const MyCart = () => {
   return (
-    // <ProviderNext>
-    <CartPage />
-    // </ProviderNext>
+    <ProviderNext>
+      <CartPage />
+    </ProviderNext>
   );
 };
 
