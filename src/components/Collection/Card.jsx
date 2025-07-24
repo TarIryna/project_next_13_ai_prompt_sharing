@@ -4,6 +4,7 @@ import Image from "next/image";
 import { changeProductIdAction } from "@/store/actions/product";
 import { useRouter } from "next/navigation";
 import Sizes from "../Product/Sizes";
+import * as S from "./styles";
 
 const Card = ({ item }) => {
   const router = useRouter();
@@ -20,24 +21,16 @@ const Card = ({ item }) => {
   return (
     <>
       {item && item.image1 && item.price && (
-        <div className="product_card mb-4 flex-column justify-between">
-          <div className="flex flex-col">
-            <h3 className="font-satoshi font-semibold text-gray-900 capitalize text-center">
-              {name}
-            </h3>
-          </div>
-          <div className="flex justify-between items-start gap-5">
-            <div className="flex-1 flex justify-center items-center gap-3 cursor-pointer">
-              <Image
-                src={image}
-                alt="user_image"
-                width={280}
-                height={280}
-                className="object-contain card-image"
-                onClick={() => handleClick(item._id)}
-              />
-            </div>
-          </div>
+        <S.CardWrapper>
+          <S.Title>{name}</S.Title>
+          <S.ImageWrapper>
+            <Image
+              src={image}
+              alt="user_image"
+              fill
+              onClick={() => handleClick(item._id)}
+            />
+          </S.ImageWrapper>
           <div>{sizes?.length > 0 && <Sizes sizes={sizes} item={item} />}</div>
           {isSale ? (
             <div className="flex-center gap-2">
@@ -49,7 +42,7 @@ const Card = ({ item }) => {
               <span className="current-price">{item.price} грн.</span>
             </div>
           )}
-        </div>
+        </S.CardWrapper>
       )}
     </>
   );

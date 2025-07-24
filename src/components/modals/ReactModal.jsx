@@ -54,7 +54,7 @@ const ReactModal = ({
       const scrollY = document.body.style.top;
       document.body.style.position = "";
       document.body.style.top = "";
-      window.scrollTo(0, Number.parseInt(scrollY || "0") * -1);
+      window && window.scrollTo(0, Number.parseInt(scrollY || "0") * -1);
     }
   }, [visible]);
 

@@ -113,29 +113,7 @@
 }
 
 /* PromptCard Component */
-.product_card {
-  @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
-  height: 400px;
-}
-.product_card {
-  @media screen and (max-width: 1200px){
-    margin: 0 auto;
-    }
-    @media screen and (max-width: 700px){
-      width: calc(50vw - 25px);
-      height: calc(50vw - 25px);
-      height: max-content;
-      padding: 5px;
 
-      h3 {
-        font-size: 10px;
-      }
-      img {
-        width: 100%;
-        height: auto;
-      }
-      }
-}
 
 .flex-center {
   @apply flex justify-center items-center;

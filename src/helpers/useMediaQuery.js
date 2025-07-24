@@ -16,7 +16,7 @@ export const useMediaQuery = ({ maxWidth, minWidth }) => {
         query += `(min-width: ${minWidth}px)`;
       }
 
-      const mediaQueryList = window.matchMedia(query);
+      const mediaQueryList = window?.matchMedia(query);
       const documentChangeHandler = () => setMatches(mediaQueryList.matches);
 
       documentChangeHandler();

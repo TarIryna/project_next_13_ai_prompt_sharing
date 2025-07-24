@@ -14,6 +14,7 @@ export const useChangeOrderStatus = async ({
     delivery,
   };
   try {
+    console.log(params);
     const response = await fetch("/api/order/new", {
       method: "PATCH",
       body: JSON.stringify(params),

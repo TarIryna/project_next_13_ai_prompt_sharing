@@ -37,10 +37,14 @@ const LoginForm = () => {
       password,
     });
 
+    console.log(result);
+
     if (result?.error) {
-      alert("Ошибка: " + result.error);
+      toast.error("Помилка: " + result.error);
+    } else {
+      toast.success("Успішно!");
     }
-    toast.success("Успішно!");
+
     hide();
   };
 

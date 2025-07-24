@@ -9,20 +9,21 @@ import * as S from "./styles";
 
 const CartItem = ({ admin, data, status }) => {
   const userId = useUser()?.user?.id;
-  console.log(data);
   const deleteOrder = async () => {
     try {
       const response = await fetch(`/api/order/new/${data.code.toString()}`, {
         method: "DELETE",
       });
 
-      useEffect(() => {
-        const localStorageData =
-          typeof window !== "undefined" && localStorage.getItem("cart");
-        if (localStorageData) {
-          getNewOrder(localStorageData);
-        }
-      }, [isAuth]);
+      // useEffect(() => {
+      //   const localStorageData =
+      //     window &&
+      //     typeof window !== "undefined" &&
+      //     localStorage.getItem("cart");
+      //   if (localStorageData) {
+      //     getNewOrder(localStorageData);
+      //   }
+      // }, [isAuth]);
 
       if (response.ok) {
         toast.success("Успішно видалено із кошика!");

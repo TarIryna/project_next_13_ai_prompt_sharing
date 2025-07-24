@@ -25,12 +25,10 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         await connectToDB();
-        console.log(credentials.email);
         const user = await User.findOne({ email: credentials.email });
-        console.log(user);
 
         if (!user || !user.password) {
-          throw new Error("Пользователь не найден");
+          throw new Error("Користувача не знайдено");
         }
 
         const isValid = await verifyPassword(
@@ -39,7 +37,7 @@ const handler = NextAuth({
         );
 
         if (!isValid) {
-          throw new Error("Неверный пароль");
+          throw new Error("Невірний пароль");
         }
 
         return {

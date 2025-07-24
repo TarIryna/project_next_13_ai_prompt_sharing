@@ -15,7 +15,7 @@ import {
   changePageAction,
 } from "@/store/actions/products";
 
-import Loading from "@/app/profile/loading";
+import Loading from "@/app/loading";
 import SeasonTabs from "./SeasonTabs";
 import List from "./CardList";
 import Filter from "./Filter";
@@ -107,10 +107,11 @@ const Collection = () => {
   }, [searchQuery, page]);
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window &&
+      window?.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
   }, [products]);
 
   const handleSearchChange = (e) => {

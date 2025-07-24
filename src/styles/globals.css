@@ -116,11 +116,6 @@
   @apply text-sm font-inter text-gray-700 hover:text-gray-500 font-medium;
 }
 
-/* PromptCard Component */
-.product_card {
-  @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter w-full h-fit;
-  height: 450px;
-}
 
 .flex-center {
   @apply flex justify-center items-center;

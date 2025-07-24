@@ -11,8 +11,7 @@ const Profile = () => {
   const { isAuth, user } = useUser();
 
   const onSignOut = () => {
-    signOut();
-    push("/");
+    signOut().then(() => push("/"));
   };
 
   return (

@@ -8,11 +8,11 @@ import UserSessionLoader from "@/components/UserSessionLoader";
 import { Provider } from "react-redux";
 import { store } from "@/store";
 
-export const LastGoogleAccountContext = createContext();
+// export const LastGoogleAccountContext = createContext();
 
 const ProviderNext = ({ children, session }) => {
-  const [isCallGoogle, setIsCallGoogle] = useState(false);
-  const [lastGoogleAccountEmail, setLastGoogleAccountEmail] = useState(null);
+  // const [isCallGoogle, setIsCallGoogle] = useState(false);
+  // const [lastGoogleAccountEmail, setLastGoogleAccountEmail] = useState(null);
 
   // useEffect(() => {
   //   if (!!userProfile?.email && isCallGoogle) {
@@ -27,19 +27,19 @@ const ProviderNext = ({ children, session }) => {
   return (
     <Provider store={store}>
       <SessionProvider session={session}>
-        <LastGoogleAccountContext.Provider
+        {/* <LastGoogleAccountContext.Provider
           value={{
             lastGoogleAccountEmail,
             handlerWrite: () => {
               setIsCallGoogle(true);
             },
           }}
-        >
-          <NiceModal.Provider>
-            <UserSessionLoader />
-            {children}
-          </NiceModal.Provider>
-        </LastGoogleAccountContext.Provider>
+        > */}
+        <NiceModal.Provider>
+          {/* <UserSessionLoader /> */}
+          {children}
+        </NiceModal.Provider>
+        {/* </LastGoogleAccountContext.Provider> */}
       </SessionProvider>
     </Provider>
   );
